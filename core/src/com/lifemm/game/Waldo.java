@@ -11,8 +11,10 @@ public class Waldo {
    private static final int STARTING_HEALTH = 400;
    private static final int ATTACKING = 1;
    private static final int MOVING = 2;
+   private static final int JUMPING = 3;
    
 
+   private int timeInState;
    private int state;
    private int health;
    private int direction;
@@ -41,19 +43,57 @@ public class Waldo {
 
    public Texture getCurrentTexture() {
       if (this.state == ATTACKING) {
-
+         return this.leftTexture;
       } else if (this.state == MOVING) {
+         if (this.direction == LEFT) {
+            return this.leftTexture;
+         } else if (this.direction == RIGHT) {
+            return this.rightTexture;
+         } else {
+            return this.leftTexture;
+         }
+      } else if (this.state == JUMPING) {
+         if (this.direction == LEFT) {
+            return this.leftTexture;
+         } else if (this.direction == RIGHT) {
+            return this.rightTexture;
+         } else {
+            return this.leftTexture;
+         }
+      } else {
+         return this.leftTexture;
+      }
+   }
 
-      } else {
-         return this.leftTexture;
+   public void updateStateTime() {
+      this.timeInState++;
+   }
+
+   public void updateJumpState() {
+      if (this.state == JUMPING) {
+         System.out.println(this.timeInState);
+         if (this.timeInState < 15) {
+            this.location.y += 4;
+         } else if (this.timeInState >= 15 && this.timeInState < 30) {
+            this.location.y -= 4;
+         } else {
+            this.location.y = 0;
+            this.state = MOVING;
+         }
       }
-      if (this.direction == LEFT) {
-         return this.leftTexture;
-      } else if (this.direction == RIGHT) {
-         return this.rightTexture;
+   }
+
+   public void setState(int state) {
+      if (this.state == state) {
+         return;
       } else {
-         return this.leftTexture;
+         this.state = state;
+         this.timeInState = 0;
       }
+   }
+
+   public void setLocationY(float y) {
+      this.location.y = y;
    }
 
    public void setLocationX(float x) {

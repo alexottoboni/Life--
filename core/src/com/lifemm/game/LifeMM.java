@@ -32,6 +32,16 @@ public class LifeMM extends ApplicationAdapter {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+      waldo.updateStateTime();
+      waldo.updateJumpState();
+
+      if (Gdx.input.isKeyPressed(Keys.UP)) {
+         // Set state to jumping
+         if (waldo.getLocation().y == 0) {
+            waldo.setState(3);
+         }
+      }
+
       if (Gdx.input.isKeyPressed(Keys.SPACE)) {
          System.out.println(isAttackCollision(waldo.getLocation(), treasure.getLocation()));
       }
@@ -44,6 +54,10 @@ public class LifeMM extends ApplicationAdapter {
       if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
          waldo.setLocationX(waldo.getLocation().x + 300 * Gdx.graphics.getDeltaTime());
          waldo.setDirection(1);
+      }
+
+      if (waldo.getLocation().y < 0) {
+         waldo.setLocationY(0);
       }
 
       if (waldo.getLocation().x < 0) {
