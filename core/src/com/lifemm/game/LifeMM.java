@@ -28,6 +28,7 @@ public class LifeMM extends ApplicationAdapter {
   
    // List of entities that currently exist
    public ArrayList<Crate> crates;
+   public ArrayList<Cloud> clouds;
 
    // Textures for the background and floor
    public static Texture backgroundTexture;
@@ -66,13 +67,31 @@ public class LifeMM extends ApplicationAdapter {
 
       // Create lists of entities 
       crates = new ArrayList<Crate>();
+      clouds = new ArrayList<Cloud>();
+      clouds.add(new Cloud(1, 300, -100));
+      clouds.add(new Cloud(2, 0, 0));
 	}
 
    public void renderBG() {
       batch.draw(backgroundTexture, 0, 0);
       batch.draw(floorTexture, 0, 0);
+      for (int i = 0; i < clouds.size(); i++) {
+         batch.draw(clouds.get(i).getCurrentTexture(), clouds.get(i).getLocation().x, clouds.get(i).getLocation().y);
+         if (clouds.get(i).getLocation().x > 1800) {
+            clouds.get(i).setLocationX(-256);
+         }
+      }
+     
    }
 
+   void updateCloudsPosition() {
+      Cloud temp;
+      for (int i = 0; i < clouds.size(); i++) {
+         temp = clouds.get(i);
+         temp.setLocationX(temp.getLocation().x + temp.getSpeed());
+      }
+   }
+   
    void printDebugInfo() {
       System.out.println("DEBUG INFO");
       System.out.println("--------------------------------------");
@@ -109,6 +128,8 @@ public class LifeMM extends ApplicationAdapter {
       if (Gdx.input.isKeyPressed(Keys.DEL)) {
          printDebugInfo();
       }
+
+      updateCloudsPosition();
 
 		batch.begin();
       renderBG();
