@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 public class Treasure {
 
    private static final int STARTING_HEALTH = 1500;
+   private static final int FLOOR = 235;
 
    private int health;
    private Rectangle location;
@@ -15,7 +16,7 @@ public class Treasure {
    Treasure() {
       this.location = new Rectangle();
       location.x = 1440/2 - 256 / 2;
-      location.y = 0;
+      location.y = FLOOR;
       location.width = 256;
       location.height = 256;
       this.health = STARTING_HEALTH;
