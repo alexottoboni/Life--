@@ -123,6 +123,11 @@ public class MainGame implements Screen {
       updateWaldoMovement();
       boundsCheckWaldo();
 
+      if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
+         game.setScreen(new MainMenu(game));
+         dispose();
+      }
+
       if (Gdx.input.isKeyPressed(Keys.DEL)) {
          printDebugInfo();
       }
