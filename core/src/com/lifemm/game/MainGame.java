@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.FPSLogger;
 
 import java.util.ArrayList;
 
@@ -29,6 +30,7 @@ public class MainGame implements Screen {
    // List of entities that currently exist
    public ArrayList<Crate> crates;
    public ArrayList<Cloud> clouds;
+   public ArrayList<Spider> spiders;
 
    // Textures for the background and floor
    public static Texture backgroundTexture;
@@ -46,7 +48,7 @@ public class MainGame implements Screen {
    // Function that gets called once to prepare everything needed for render
 	public MainGame (final LifeMM game) {
       this.game = game;
-      
+
       // One of a kind entities
       waldo = new Waldo();
       treasure = new Treasure();
@@ -66,8 +68,10 @@ public class MainGame implements Screen {
       // Create lists of entities 
       crates = new ArrayList<Crate>();
       clouds = new ArrayList<Cloud>();
+      spiders = new ArrayList<Spider>();
       clouds.add(new Cloud(1, 300, -100));
       clouds.add(new Cloud(2, 0, 0));
+      spiders.add(new Spider());
 	}
 
    public void renderBG() {
@@ -140,6 +144,7 @@ public class MainGame implements Screen {
 		game.batch.draw(waldo.getCurrentTexture(), waldo.getLocation().x, waldo.getLocation().y);
       font.draw(game.batch, "Score " + waldo.getScore(), 1000, 700);
       renderCrates();
+      renderSpiders();
 		game.batch.end();
 
    }
@@ -216,6 +221,12 @@ public class MainGame implements Screen {
          waldo.setLocationY(FLOOR);
       }
 
+   }
+
+   public void renderSpiders() {
+      for (int i = 0; i < spiders.size(); i++) {
+         game.batch.draw(spiders.get(i).getCurrentTexture(), spiders.get(i).getLocation().x, spiders.get(i).getLocation().y);
+      }
    }
 
    public void renderCrates() {
