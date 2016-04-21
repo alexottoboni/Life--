@@ -4,36 +4,28 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
-public class Waldo {
+public class Waldo extends Entity {
 
    private static final int FLOOR = 235;
-   private static final int LEFT = -1;
-   private static final int RIGHT = 1;
-   private static final int STARTING_HEALTH = 400;
    private static final int ATTACKING = 1;
    private static final int MOVING = 2;
    private static final int JUMPING = 3;
    private static final int BUILDING = 4;
 
-   private int score;
    private int timeInState;
    private int state;
-   private int health;
-   private int direction;
-   private Rectangle location;
+   private int score;
    private Texture leftTexture;
    private Texture rightTexture;
    private Texture attackTexture;
   
    Waldo() {
-      this.location = new Rectangle();
       location.x = 1440/2 - 128/2;
       location.y = FLOOR;
       location.width = 128;
       location.height = 128;
 
-      this.health = STARTING_HEALTH;
-      this.direction = RIGHT;
+      this.direction = Entity.Direction.RIGHT;
 
       this.state = MOVING;
 
@@ -43,33 +35,29 @@ public class Waldo {
 
    }
 
-   public int getScore() {
-      return this.score;
-   }
-
    public Texture getCurrentTexture() {
       if (this.state == ATTACKING) {
          return this.leftTexture;
       } else if (this.state == MOVING) {
-         if (this.direction == LEFT) {
+         if (this.direction == Entity.Direction.LEFT) {
             return this.leftTexture;
-         } else if (this.direction == RIGHT) {
+         } else if (this.direction == Entity.Direction.RIGHT) {
             return this.rightTexture;
          } else {
             return this.leftTexture;
          }
       } else if (this.state == JUMPING) {
-         if (this.direction == LEFT) {
+         if (this.direction == Entity.Direction.LEFT) {
             return this.leftTexture;
-         } else if (this.direction == RIGHT) {
+         } else if (this.direction == Entity.Direction.RIGHT) {
             return this.rightTexture;
          } else {
             return this.leftTexture;
          }
       } else if (this.state == BUILDING) {
-         if (this.direction == LEFT) {
+         if (this.direction == Entity.Direction.LEFT) {
             return this.leftTexture;
-         } else if (this.direction == RIGHT) {
+         } else if (this.direction == Entity.Direction.RIGHT) {
             return this.rightTexture;
          } else {
             return this.leftTexture;
@@ -87,11 +75,11 @@ public class Waldo {
       if (this.state == JUMPING) {
          System.out.println(this.timeInState);
          if (this.timeInState < 15) {
-            this.location.y += 4;
+            this.setX(this.getX() + 4);
          } else if (this.timeInState >= 15 && this.timeInState < 30) {
-            this.location.y -= 4;
+            this.setY(this.getY() - 4);
          } else {
-            this.location.y = FLOOR;
+            this.setY(FLOOR);
             this.setState(MOVING);
          }
       } else if (this.state == BUILDING) {
@@ -114,28 +102,7 @@ public class Waldo {
       }
    }
 
-   public void setLocationY(float y) {
-      this.location.y = y;
+   public int getScore() {
+      return score;
    }
-
-   public void setLocationX(float x) {
-      this.location.x = x;
-   }
-
-   public Rectangle getLocation() {
-      return this.location;
-   }
-
-   public void setDirection(int direction) {
-      this.direction = direction;
-   }
-
-   public int getDirection() {
-      return this.direction;
-   }
-
-   public int getHealth() {
-      return this.health;
-   }
- 
 }

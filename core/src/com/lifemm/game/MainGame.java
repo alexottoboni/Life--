@@ -28,6 +28,7 @@ public class MainGame implements Screen {
    BitmapFont font;
   
    // List of entities that currently exist
+   public ArrayList<Entity> entities;
    public ArrayList<Crate> crates;
    public ArrayList<Cloud> clouds;
    public ArrayList<Spider> spiders;
@@ -44,9 +45,9 @@ public class MainGame implements Screen {
    private static final int BUILDING = 4;
    private static final int LEFT = -1;
    private static final int RIGHT = 1;
-	
+    
    // Function that gets called once to prepare everything needed for render
-	public MainGame (final LifeMM game) {
+    public MainGame (final LifeMM game) {
       this.game = game;
 
       // One of a kind entities
@@ -69,10 +70,11 @@ public class MainGame implements Screen {
       crates = new ArrayList<Crate>();
       clouds = new ArrayList<Cloud>();
       spiders = new ArrayList<Spider>();
+      entities = new ArrayList<Entity>();
       clouds.add(new Cloud(1, 300, -100));
       clouds.add(new Cloud(2, 0, 0));
       spiders.add(new Spider());
-	}
+    }
 
    public void renderBG() {
       game.batch.draw(backgroundTexture, 0, 0);
@@ -80,7 +82,7 @@ public class MainGame implements Screen {
       for (int i = 0; i < clouds.size(); i++) {
          game.batch.draw(clouds.get(i).getCurrentTexture(), clouds.get(i).getLocation().x, clouds.get(i).getLocation().y);
          if (clouds.get(i).getLocation().x > 1800) {
-            clouds.get(i).setLocationX(-256);
+            clouds.get(i).getLocation().x = -256;
          }
       }
      
@@ -90,16 +92,19 @@ public class MainGame implements Screen {
       Cloud temp;
       for (int i = 0; i < clouds.size(); i++) {
          temp = clouds.get(i);
-         temp.setLocationX(temp.getLocation().x + temp.getSpeed());
+         temp.getLocation().x = temp.getLocation().x + temp.getSpeed();
       }
    }
    
    void printDebugInfo() {
       System.out.println("DEBUG INFO");
       System.out.println("--------------------------------------");
-      System.out.println("Waldo State: " + waldo.getState());
       System.out.println("Waldo X: " + (waldo.getLocation().x + waldo.getLocation().width/2));
       System.out.println("Waldo Y: " + waldo.getLocation().y);
+      System.out.println("Waldo Yvel: " + waldo.getYVelocity());
+      System.out.println("Waldo Yacc: " + waldo.getYAcceleration());
+      System.out.println("Waldo Xvel: " + waldo.getXVelocity());
+      System.out.println("Waldo Xacc: " + waldo.getXAcceleration());
       System.out.println("Waldo Health: " + waldo.getHealth());
       System.out.println("Waldo Direction: " + waldo.getDirection());
       System.out.println("Treasure X: " + (treasure.getLocation().x + treasure.getLocation().width/2));
@@ -108,24 +113,26 @@ public class MainGame implements Screen {
       System.out.println("");
    }
 
-	@Override
-	public void render (float delta) {
+    @Override
+    public void render (float delta) {
       // Clears the screen, don't remove
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
       // Keep track of the number of frames that the
       // main character has spent in his current state
-      waldo.updateStateTime();
+      // waldo.updateStateTime();
 
       // Update what the main character is doing,
       // for example update his Y position based on how long
       // he has been in the jumping state for.
-      waldo.updateState();
+      // waldo.updateState();
 
       // Accept user input
       updateWaldoMovement();
       boundsCheckWaldo();
+
+      waldo.update();
 
       if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
          game.setScreen(new MainMenu(game));
@@ -138,23 +145,44 @@ public class MainGame implements Screen {
 
       updateCloudsPosition();
 
-		game.batch.begin();
+        game.batch.begin();
       renderBG();
       game.batch.draw(treasure.getCurrentTexture(), treasure.getLocation().x, treasure.getLocation().y);
-		game.batch.draw(waldo.getCurrentTexture(), waldo.getLocation().x, waldo.getLocation().y);
+        game.batch.draw(waldo.getCurrentTexture(), waldo.getLocation().x, waldo.getLocation().y);
       font.draw(game.batch, "Score " + waldo.getScore(), 1000, 700);
+
+      for (Spider s : spiders) {
+         boolean move = true;
+         for (Crate c : crates) {
+            if (isCollision(s.getLocation(), c.getLocation())) {
+               move = false;
+               break;
+            }
+         }
+         if (isCollision(s.getLocation(), waldo.getLocation())) {
+            move = false;
+         }
+         if (isCollision(s.getLocation(), treasure.getLocation())) {
+            // treasure.injure();
+            move = false;
+         }
+         if (move) {
+            // s.move();
+         }
+      }
+
       renderCrates();
       renderSpiders();
-		game.batch.end();
+        game.batch.end();
 
    }
 
    // Update the state and position of the main character based on user input
    public void updateWaldoMovement() {
     if (Gdx.input.isKeyPressed(Keys.UP)) {
-         // Set state to jumping
-         if (waldo.getLocation().y == FLOOR && waldo.getState() == MOVING) {
-            waldo.setState(JUMPING);
+         if (waldo.getLocation().y == FLOOR) {
+            waldo.setYVelocity(10);
+            waldo.setYAcceleration(-1);
          }
       }
 
@@ -163,19 +191,25 @@ public class MainGame implements Screen {
       }
 
       if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-         waldo.setLocationX(waldo.getLocation().x - 300 * Gdx.graphics.getDeltaTime());
-         waldo.setDirection(LEFT);
+         waldo.setXVelocity(-3);
+         // waldo.getLocation().y = (waldo.getLocation().x - 300 * Gdx.graphics.getDeltaTime());
+         waldo.setDirection(Entity.Direction.LEFT);
       }
       
       if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-         waldo.setLocationX(waldo.getLocation().x + 300 * Gdx.graphics.getDeltaTime());
-         waldo.setDirection(RIGHT);
+         waldo.setXVelocity(3);
+         // waldo.getLocation(). x = (waldo.getLocation().x + 300 * Gdx.graphics.getDeltaTime());
+         waldo.setDirection(Entity.Direction.RIGHT);
+      }
+
+      if (!(Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.LEFT))) {
+         waldo.setXVelocity(0);
       }
 
       if (Gdx.input.isKeyPressed(Keys.A)) {
          if (waldo.getState() != BUILDING) {
             Rectangle temp = new Rectangle(waldo.getLocation());
-            if (waldo.getDirection() == LEFT) {
+            if (waldo.getDirection() == Entity.Direction.LEFT) {
                temp.x -= 129;
             } else {
                temp.x += 129;
@@ -195,7 +229,7 @@ public class MainGame implements Screen {
             }
 
             waldo.setState(BUILDING);
-            if (waldo.getDirection() == LEFT) {
+            if (waldo.getDirection() == Entity.Direction.LEFT) {
                crates.add(new Crate(waldo.getLocation().x - 128));
             } else {
                crates.add(new Crate(waldo.getLocation().x + 128));
@@ -206,20 +240,22 @@ public class MainGame implements Screen {
 
    void boundsCheckWaldo() {
       if (waldo.getLocation().y < FLOOR) {
-         waldo.setLocationY(FLOOR);
+         waldo.setYAcceleration(0);
+         waldo.setYVelocity(0);
+         waldo.getLocation().y = FLOOR;
       }
 
-      if (waldo.getLocation().x < 0) {
-         waldo.setLocationX(0);
+      if (waldo.getLocation().x <= 0) {
+         waldo.getLocation().x = 0;
       }
 
-      if (waldo.getLocation().x > 1440 - 128) {
-         waldo.setLocationX(1440 - 128);
+      if (waldo.getLocation().x >= 1440 - 128) {
+         waldo.getLocation().x = 1440 - 128;
       }
 
-      if (waldo.getState() == MOVING && waldo.getLocation().y != FLOOR) {
-         waldo.setLocationY(FLOOR);
-      }
+      // if (waldo.getLocation().y != FLOOR) {
+      //    waldo.getLocation().y = FLOOR;
+      // }
 
    }
 
