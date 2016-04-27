@@ -100,4 +100,9 @@ public class Waldo extends Entity {
    public int getScore() {
       return score;
    }
+  
+   public int getLives() {
+      return lives;
+   }
+
 }
