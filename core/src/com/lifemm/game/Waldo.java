@@ -18,6 +18,7 @@ public class Waldo extends Entity {
    private Texture leftTexture;
    private Texture rightTexture;
    private Texture attackTexture;
+   private int lives;
   
    Waldo() {
       location.x = 1440/2 - 128/2;
@@ -32,7 +33,7 @@ public class Waldo extends Entity {
       this.leftTexture = new Texture("playersmall.png");
       this.rightTexture = new Texture("playersmallr.png"); 
       this.attackTexture = new Texture("playerswing.png");
-
+      this.lives = 3;
    }
 
    public Texture getCurrentTexture() {
