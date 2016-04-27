@@ -5,8 +5,10 @@ This represents a basic on screen object.
 */
 
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.graphics.Texture;
 
-public class Entity {
+abstract public class Entity {
+    private static final int FLOOR = 235;
     public enum Direction {UP, DOWN, LEFT, RIGHT};
     protected Rectangle location;
     private float x_velocity;
@@ -26,7 +28,11 @@ public class Entity {
 
     public void update() {
         location.x += x_velocity;
-        location.y += y_velocity;
+        if (location.y + y_velocity < FLOOR) {
+           location.y = FLOOR;
+        } else {
+           location.y += y_velocity;
+        }
         x_velocity += x_acceleration;
         y_velocity += y_acceleration;
     }
@@ -78,6 +84,10 @@ public class Entity {
         return direction;
     }
 
+    public void setHealth(float health) {
+       this.health = health;
+    }
+
     public void addHealth(float health) {
         this.health += health;
     }
@@ -93,4 +103,6 @@ public class Entity {
     public void setDirection(Direction dir) {
         this.direction = dir;
     }
+
+    public abstract Texture getCurrentTexture();
 }

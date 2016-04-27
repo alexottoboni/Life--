@@ -4,31 +4,24 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
-public class Spider {
+public class Spider extends Entity {
 
    private static final int FLOOR = 235;
-   private static final int LEFT = -1;
-   private static final int RIGHT = 1;
-   private static final int STARTING_HEALTH = 100;
    private static final int ATTACKING = 1;
    private static final int MOVING = 2;
 
    private int timeInState;
    private int state;
-   private int health;
-   private int direction;
-   private Rectangle location;
    private Texture rightTexture;
    
    Spider() {
-      this.location = new Rectangle();
       location.x = 0;
       location.y = FLOOR;
       location.width = 128;
       location.height = 128;
 
-      this.health = STARTING_HEALTH;
-      this.direction = RIGHT;
+      this.direction = Entity.Direction.RIGHT;
+      this.setXVelocity(1); 
 
       this.state = MOVING;
       this.rightTexture = new Texture("spider.png");
@@ -54,7 +47,4 @@ public class Spider {
       return this.location;
    }
 
-   public int getHealth() {
-      return this.health;
-   }
 }

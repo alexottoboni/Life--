@@ -72,20 +72,14 @@ public class Waldo extends Entity {
    }
 
    public void updateState() {
-      if (this.state == JUMPING) {
-         System.out.println(this.timeInState);
-         if (this.timeInState < 15) {
-            this.setX(this.getX() + 4);
-         } else if (this.timeInState >= 15 && this.timeInState < 30) {
-            this.setY(this.getY() - 4);
-         } else {
-            this.setY(FLOOR);
-            this.setState(MOVING);
-         }
-      } else if (this.state == BUILDING) {
+      if (this.state == BUILDING) {
          if (this.timeInState > 100) {
             this.setState(MOVING);
          }       
+      } else if (this.state == ATTACKING) {
+         if (this.timeInState > 40) {
+            this.setState(MOVING);
+         }
       }
    }
 
