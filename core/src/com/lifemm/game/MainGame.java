@@ -44,6 +44,9 @@ public class MainGame implements Screen {
    private static final int BUILDING = 4;
    private static final int LEFT = -1;
    private static final int RIGHT = 1;
+   
+   // Globals
+   Stopwatch time;
     
    // Function that gets called once to prepare everything needed for render
     public MainGame (final LifeMM game) {
@@ -52,6 +55,7 @@ public class MainGame implements Screen {
       // One of a kind entities
       waldo = new Waldo();
       treasure = new Treasure();
+      time = new Stopwatch();
 
       // Load Textures
       backgroundTexture = new Texture("bg4.png");
@@ -146,7 +150,7 @@ public class MainGame implements Screen {
       renderBG();
       game.batch.draw(treasure.getCurrentTexture(), treasure.getLocation().x, treasure.getLocation().y);
       game.batch.draw(waldo.getCurrentTexture(), waldo.getLocation().x, waldo.getLocation().y);
-      font.draw(game.batch, "Score " + waldo.getScore(), 1000, 700);
+      font.draw(game.batch, "Time " + (int)time.getTime(), 1000, 700);
 
       for (Entity s : enemies) {
          boolean move = true;
@@ -167,6 +171,8 @@ public class MainGame implements Screen {
             s.update();
          }
       }
+      
+      time.lap();
 
       renderCrates();
       renderSpiders();

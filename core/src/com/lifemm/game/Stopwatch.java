@@ -1,5 +1,7 @@
+package com.lifemm.game;
+
 /**
- *  StopWatch
+ *  Stopwatch
  *
  *  Keeps track of time from start to stop. Adds elapsed time to a total.
  *
@@ -20,18 +22,28 @@ public class Stopwatch {
     } 
 
     /**
-     * Start time.
+     * Restart starting time.
      */
-    public void start() {
+    public void restart() {
         start = System.currentTimeMillis();
     }
     
     /**
-     * Stop time and add to total elapsed time.
+     * Record elapsed time without stopping watch.
      */
-    public void stop() {
+    public void lap() {
         long now = System.currentTimeMillis();
+        
         total += (now - start) / 1000.0;
+        start = System.currentTimeMillis();
+    }
+    
+    /**
+     * Reset the stop watch.
+     */
+    public void clear() {
+        start = System.currentTimeMillis();
+        total = 0;
     }
     
     /**
