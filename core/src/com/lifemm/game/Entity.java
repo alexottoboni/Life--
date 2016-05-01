@@ -37,6 +37,22 @@ abstract public class Entity {
         y_velocity += y_acceleration;
     }
 
+    public void setHeight(float height) {
+       getLocation().height = height;
+    }
+
+    public float getHeight() {
+       return getLocation().height;
+    }
+
+    public void setWidth(float width) {
+       getLocation().width = width;
+    }
+
+    public float getWidth() {
+       return getLocation().width;
+    }
+
     public void setX(float x) {
         getLocation().x = x;
     }

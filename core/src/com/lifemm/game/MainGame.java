@@ -150,7 +150,6 @@ public class MainGame implements Screen {
       renderBG();
       game.batch.draw(treasure.getCurrentTexture(), treasure.getLocation().x, treasure.getLocation().y);
       game.batch.draw(waldo.getCurrentTexture(), waldo.getLocation().x, waldo.getLocation().y);
-      
 
       font.draw(game.batch, "Health " + (int)waldo.getHealth(), 1100, 800);
       font.draw(game.batch, "Lives " + waldo.getLives(), 1100, 750);
@@ -180,9 +179,17 @@ public class MainGame implements Screen {
       time.lap();
 
       renderCrates();
-      renderSpiders();
+      renderEnemies();
       game.batch.end();
+   }
 
+   // Check what enemies are alive
+   public void checkEnemyLife() {
+      for (Entity s : enemies) {
+         if (s.getHealth() <= 0) {
+            enemies.remove(s);
+         }
+      }
    }
 
    // Update the state and position of the main character based on user input
@@ -195,8 +202,16 @@ public class MainGame implements Screen {
       }
 
       if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-         waldo.setState(ATTACKING);
-         System.out.println(isAttackCollision(waldo.getLocation(), treasure.getLocation()));
+         if (waldo.getState() != ATTACKING) {
+            waldo.setState(ATTACKING);
+            for (Entity s : enemies) {
+               if (isAttackCollision(waldo, s)) {
+                  s.setHealth(s.getHealth() - 300);
+               }
+               // Debug Output
+               System.out.println(isAttackCollision(waldo, s));
+            }
+         }
       }
 
       if (Gdx.input.isKeyPressed(Keys.LEFT)) {
@@ -261,9 +276,11 @@ public class MainGame implements Screen {
       }
    }
 
-   public void renderSpiders() {
-      for (int i = 0; i < enemies.size(); i++) {
-         game.batch.draw(enemies.get(i).getCurrentTexture(), enemies.get(i).getLocation().x, enemies.get(i).getLocation().y);
+   public void renderEnemies() {
+      for (Entity s : enemies) {
+         if (s.getHealth() > 0) {
+            game.batch.draw(s.getCurrentTexture(), s.getLocation().x, s.getLocation().y);
+         }
       }
    }
 
@@ -277,8 +294,20 @@ public class MainGame implements Screen {
       return (objectA.x <= (objectB.x + objectB.width)) && (objectB.x <= (objectA.x + objectA.width));
    }
 
-   public boolean isAttackCollision(Rectangle player, Rectangle object) {
-      if (Math.abs((player.x + player.width/2) - (object.x + object.width/2)) < 150) {
+   public boolean isAttackCollision(Waldo waldo, Entity entity) {
+      float distance = (waldo.getX() + waldo.getWidth()/2) - (entity.getX() + entity.getWidth()/2);
+ 
+      System.out.println("Distance away: " + distance);
+     
+      Entity.Direction requiredDirection;
+
+      if (distance >= 0) {
+         requiredDirection = Entity.Direction.LEFT;
+      } else {
+         requiredDirection = Entity.Direction.RIGHT;
+      }
+
+      if ((waldo.getDirection() == requiredDirection) && Math.abs(distance) < 150) {
          return true;
       } else {
          return false;

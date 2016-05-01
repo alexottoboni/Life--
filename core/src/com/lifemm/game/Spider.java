@@ -25,6 +25,7 @@ public class Spider extends Entity {
 
       this.state = MOVING;
       this.rightTexture = new Texture("spider.png");
+      this.setHealth(500);
    }
 
    public Texture getCurrentTexture() {
