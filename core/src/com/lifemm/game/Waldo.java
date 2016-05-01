@@ -15,31 +15,43 @@ public class Waldo extends Entity {
    private int timeInState;
    private int state;
    private int score;
+   private int lives;
    private Texture leftTexture;
    private Texture rightTexture;
-   private Texture attackTexture;
-   private int lives;
+   private Texture rightAttackTexture;
+   private Texture leftAttackTexture;
   
    Waldo() {
       location.x = 1440/2 - 128/2;
       location.y = FLOOR;
       location.width = 128;
       location.height = 128;
-
+      
+      this.setHealth((float)100.00);
       this.direction = Entity.Direction.RIGHT;
 
       this.state = MOVING;
 
       this.leftTexture = new Texture("playersmall.png");
       this.rightTexture = new Texture("playersmallr.png"); 
-      this.attackTexture = new Texture("playerswing.png");
+      this.rightAttackTexture = new Texture("playerswing_right.png");
+      this.leftAttackTexture = new Texture("playerswing_left.png");
+      
       this.lives = 3;
    }
 
    public Texture getCurrentTexture() {
       if (this.state == ATTACKING) {
-         return this.leftTexture;
+         if (this.direction == Entity.Direction.LEFT) {
+            return this.leftAttackTexture;
+         } else if (this.direction == Entity.Direction.RIGHT) {
+            return this.rightAttackTexture;
+         } else {
+            return this.leftTexture;
+         }
+         //return this.leftTexture;
       } else if (this.state == MOVING) {
+
          if (this.direction == Entity.Direction.LEFT) {
             return this.leftTexture;
          } else if (this.direction == Entity.Direction.RIGHT) {
@@ -104,5 +116,4 @@ public class Waldo extends Entity {
    public int getLives() {
       return lives;
    }
-
 }

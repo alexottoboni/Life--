@@ -150,7 +150,12 @@ public class MainGame implements Screen {
       renderBG();
       game.batch.draw(treasure.getCurrentTexture(), treasure.getLocation().x, treasure.getLocation().y);
       game.batch.draw(waldo.getCurrentTexture(), waldo.getLocation().x, waldo.getLocation().y);
-      font.draw(game.batch, "Time " + (int)time.getTime(), 1000, 700);
+      
+
+      font.draw(game.batch, "Health " + (int)waldo.getHealth(), 1100, 800);
+      font.draw(game.batch, "Lives " + waldo.getLives(), 1100, 750);
+      font.draw(game.batch, "Score " + waldo.getScore(), 1100, 700);      
+      font.draw(game.batch, "Time " + (int)time.getTime(), 1100, 650);
 
       for (Entity s : enemies) {
          boolean move = true;
