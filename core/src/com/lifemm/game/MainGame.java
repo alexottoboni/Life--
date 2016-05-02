@@ -13,12 +13,15 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.audio.Sound;
 
 import java.util.ArrayList;
 
 public class MainGame implements Screen {
    
    final LifeMM game;
+
+   public enum MainGameState {PLAY, PAUSED};
 
    // Main Character and Treasure
    Waldo waldo;
@@ -36,6 +39,9 @@ public class MainGame implements Screen {
    public static Texture backgroundTexture;
    public static Texture floorTexture;
 
+   // Sounds
+   public static Sound bgSound;
+
    // Constants
    private static final int FLOOR = 235;
    private static final int ATTACKING = 1;
@@ -46,7 +52,9 @@ public class MainGame implements Screen {
    private static final int RIGHT = 1;
    
    // Globals
-   Stopwatch time;
+   public MainGameState state = MainGameState.PLAY;
+   public int framesInState;
+   public Stopwatch time;
     
    // Function that gets called once to prepare everything needed for render
     public MainGame (final LifeMM game) {
@@ -60,6 +68,10 @@ public class MainGame implements Screen {
       // Load Textures
       backgroundTexture = new Texture("bg4.png");
       floorTexture = new Texture("floor.png");
+
+      // Load Sounds
+      //bgSound = Gdx.audio.newSound(Gdx.files.internal("data/bgSound2.mp3"));
+      //bgSound.play();
 
       // Generate the font we use
       FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("GROBOLD.ttf"));
@@ -115,8 +127,7 @@ public class MainGame implements Screen {
       System.out.println("");
    }
 
-    @Override
-    public void render (float delta) {
+   public void doPlay() {
       // Clears the screen, don't remove
       Gdx.gl.glClearColor(1, 1, 1, 1);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -134,6 +145,13 @@ public class MainGame implements Screen {
       boundsCheckWaldo();
 
       waldo.update();
+
+      framesInState++;
+
+      if (framesInState > 20 && Gdx.input.isKeyPressed(Keys.P)) {
+         state = MainGameState.PAUSED;
+         framesInState = 0;
+      }
 
       if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
          game.setScreen(new MainMenu(game));
@@ -181,6 +199,27 @@ public class MainGame implements Screen {
       renderCrates();
       renderEnemies();
       game.batch.end();
+   }
+
+   public void doPaused() {
+      game.batch.begin();
+      font.draw(game.batch, "Paused", 1440/2 - 100, 810/2);
+      if (framesInState > 20 && Gdx.input.isKeyPressed(Keys.P)) {
+         state = MainGameState.PLAY;
+         framesInState = 0;
+      }
+      game.batch.end();
+      framesInState++;
+   }
+
+    @Override
+    public void render (float delta) {
+      if (state == MainGameState.PLAY) {
+         doPlay(); 
+      } else {
+         doPaused();
+      }
+
    }
 
    // Check what enemies are alive
@@ -339,5 +378,6 @@ public class MainGame implements Screen {
       floorTexture.dispose();
       backgroundTexture.dispose();
       font.dispose();
+      //bgSound.dispose();
    }
 }
