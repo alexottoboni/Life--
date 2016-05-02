@@ -4,14 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
-public class Spider extends Entity {
+public class Spider extends Enemy {
 
    private static final int FLOOR = 235;
    private static final int ATTACKING = 1;
    private static final int MOVING = 2;
 
-   private int timeInState;
-   private int state;
    private Texture rightTexture;
    
    Spider() {
@@ -23,6 +21,9 @@ public class Spider extends Entity {
       this.direction = Entity.Direction.RIGHT;
       this.setXVelocity(1); 
 
+      this.attackInterval = 50;
+      this.damage = 20;
+      this.timeInState = 0;
       this.state = MOVING;
       this.rightTexture = new Texture("spider.png");
       this.setHealth(500);
@@ -32,14 +33,6 @@ public class Spider extends Entity {
       return this.rightTexture;
    }
 
-   public void updateStateTime() {
-      this.timeInState++;
-   }
-
-   public int getState() {
-      return this.state;
-   }
-   
    public void setLocationX(float x) {
       this.location.x = x;
    }

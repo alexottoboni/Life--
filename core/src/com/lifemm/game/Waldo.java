@@ -116,4 +116,8 @@ public class Waldo extends Entity {
    public int getLives() {
       return lives;
    }
+   
+   public void decrementLives() {
+      this.lives = lives - 1;
+   }
 }

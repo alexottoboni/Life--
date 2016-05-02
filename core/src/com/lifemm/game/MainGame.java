@@ -31,7 +31,7 @@ public class MainGame implements Screen {
    BitmapFont font;
   
    // List of entities that currently exist
-   public ArrayList<Entity> enemies;
+   public ArrayList<Enemy> enemies;
    public ArrayList<Entity> crates;
    public ArrayList<Entity> clouds;
 
@@ -70,8 +70,8 @@ public class MainGame implements Screen {
       floorTexture = new Texture("floor.png");
 
       // Load Sounds
-      //bgSound = Gdx.audio.newSound(Gdx.files.internal("data/bgSound2.mp3"));
-      //bgSound.play();
+      bgSound = Gdx.audio.newSound(Gdx.files.internal("data/bgSound.wav"));
+      bgSound.play();
 
       // Generate the font we use
       FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("GROBOLD.ttf"));
@@ -84,7 +84,7 @@ public class MainGame implements Screen {
       // Create lists of entities 
       crates = new ArrayList<Entity>();
       clouds = new ArrayList<Entity>();
-      enemies = new ArrayList<Entity>();
+      enemies = new ArrayList<Enemy>();
       enemies.add(new Spider());
       clouds.add(new Cloud(1, 300, -100));
       clouds.add(new Cloud(2, 0, 0));
@@ -144,6 +144,22 @@ public class MainGame implements Screen {
       updateWaldoMovement();
       boundsCheckWaldo();
 
+      if (waldo.getHealth() <= 0) {
+         waldo.decrementLives();
+         waldo.setX(1440/2);
+         waldo.setHealth(100);
+      }
+
+      if (waldo.getLives() == 0) {
+         game.setScreen(new MainMenu(game));
+         dispose();
+      }
+
+      if (treasure.getHealth() <= 0) {
+         game.setScreen(new MainMenu(game));
+         dispose();
+      }
+
       waldo.update();
 
       framesInState++;
@@ -164,6 +180,8 @@ public class MainGame implements Screen {
 
       updateCloudsPosition();
 
+      updateEnemiesState();
+
       game.batch.begin();
       renderBG();
       game.batch.draw(treasure.getCurrentTexture(), treasure.getLocation().x, treasure.getLocation().y);
@@ -173,32 +191,50 @@ public class MainGame implements Screen {
       font.draw(game.batch, "Lives " + waldo.getLives(), 1100, 750);
       font.draw(game.batch, "Score " + waldo.getScore(), 1100, 700);      
       font.draw(game.batch, "Time " + (int)time.getTime(), 1100, 650);
+         
+      time.lap();
+      
+      deleteDeadEnemies();
+      deleteDeadCrates();
+      renderCrates();
+      renderEnemies();
+      game.batch.end();
+   }
 
-      for (Entity s : enemies) {
+   public void updateEnemiesState() {
+   for (Enemy s : enemies) {
+         s.updateStateTime();
          boolean move = true;
          for (Entity c : crates) {
             if (isCollision(s.getLocation(), c.getLocation())) {
                move = false;
-               break;
+               if (s.getState() != ATTACKING) {
+                  s.setState(ATTACKING);
+                  c.setHealth(c.getHealth() - s.getDamage());
+               }
             }
          }
          if (isCollision(s.getLocation(), waldo.getLocation())) {
             move = false;
+            if (s.getState() != ATTACKING) {
+               s.setState(ATTACKING);
+               waldo.setHealth(waldo.getHealth() - s.getDamage());
+            }
          }
          if (isCollision(s.getLocation(), treasure.getLocation())) {
-            // treasure.injure();
             move = false;
+            if (s.getState() != ATTACKING) {
+               s.setState(ATTACKING);
+               treasure.setHealth(treasure.getHealth() - s.getDamage());
+            }
          }
          if (move) {
             s.update();
          }
+         if (s.getTimeInState() > s.getAttackInterval()) {
+            s.setState(MOVING);
+         }
       }
-      
-      time.lap();
-
-      renderCrates();
-      renderEnemies();
-      game.batch.end();
    }
 
    public void doPaused() {
@@ -223,10 +259,19 @@ public class MainGame implements Screen {
    }
 
    // Check what enemies are alive
-   public void checkEnemyLife() {
-      for (Entity s : enemies) {
-         if (s.getHealth() <= 0) {
-            enemies.remove(s);
+   public void deleteDeadEnemies() {
+      for (int i = 0; i < enemies.size(); i++) {
+         if (enemies.get(i).getHealth() <= 0) {
+            enemies.remove(enemies.get(i));
+         }
+      }
+   }
+
+   // Check what crates are alive
+   public void deleteDeadCrates() {
+      for (int i = 0; i < crates.size(); i++) {
+         if (crates.get(i).getHealth() <= 0) {
+            crates.remove(crates.get(i));
          }
       }
    }
@@ -378,6 +423,6 @@ public class MainGame implements Screen {
       floorTexture.dispose();
       backgroundTexture.dispose();
       font.dispose();
-      //bgSound.dispose();
+      bgSound.dispose();
    }
 }

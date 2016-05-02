@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.audio.Sound;
 
 public class MainMenu implements Screen {
 
@@ -20,6 +21,9 @@ public class MainMenu implements Screen {
    public static Texture selectedControls;
    public static Texture controls;
    public int buttonSelection;
+
+   // Sounds
+   public static Sound bgSound;
 
    public MainMenu (final LifeMM game) {
       this.game = game;
@@ -34,6 +38,8 @@ public class MainMenu implements Screen {
       parameter.size = 72;
       parameter.borderWidth = 2;
       titleFont = generator.generateFont(parameter);
+      bgSound = Gdx.audio.newSound(Gdx.files.internal("data/menuSound.wav"));
+      bgSound.play();
    } 
 
    @Override
@@ -109,5 +115,6 @@ public class MainMenu implements Screen {
 
     @Override
     public void dispose() {
+      bgSound.dispose();
     }
 }
