@@ -16,10 +16,12 @@ public class MainMenu implements Screen {
 
    BitmapFont titleFont;
    public static Texture backgroundTexture;
-   public static Texture selectedPlay;
    public static Texture play;
-   public static Texture selectedControls;
+   public static Texture selectedPlay;
    public static Texture controls;
+   public static Texture selectedControls;
+   public static Texture tutorial;
+   public static Texture selectedTutorial;
    public int buttonSelection;
 
    // Sounds
@@ -32,6 +34,8 @@ public class MainMenu implements Screen {
       play = new Texture("playbutton.png");
       controls = new Texture("controlsbutton.png");
       selectedControls = new Texture("controlsbuttonselected.png");
+      tutorial = new Texture("tutorialbutton.png");
+      selectedTutorial = new Texture("tutorialbuttonselected.png");
       backgroundTexture = new Texture("bg4.png");
       FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("GROBOLD.ttf"));
       FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -53,6 +57,9 @@ public class MainMenu implements Screen {
             dispose();
          } else if (buttonSelection == 1) {
 
+         } else if (buttonSelection == 2) {
+            game.setScreen(new Tutorial(game));
+            dispose();
          } else {
 
          }
@@ -65,7 +72,7 @@ public class MainMenu implements Screen {
       }
 
       if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-         if (buttonSelection < 1) {
+         if (buttonSelection < 2) {
             buttonSelection++;
          }
       }
@@ -73,7 +80,7 @@ public class MainMenu implements Screen {
       game.batch.begin();
       game.batch.draw(backgroundTexture, 0, 0);
       titleFont.draw(game.batch, "Life--", 1440/2 - 100, 700);
-      titleFont.draw(game.batch, "Press Enter", 1440/2 - 100, 200);
+      titleFont.draw(game.batch, "Press Enter", 1440/2 - 200, 200);
       drawButtons();
       game.batch.end();
    }
@@ -91,9 +98,15 @@ public class MainMenu implements Screen {
          game.batch.draw(controls, 1440/2 - 128, 350);
       }
 
+      if (buttonSelection == 2) {
+         game.batch.draw(selectedTutorial, 1440/2 - 128, 300);
+      } else {
+         game.batch.draw(tutorial, 1440/2 - 128, 300);
+      }
+
    }
 
-   @Override
+    @Override
     public void resize(int width, int height) {
     }
 
