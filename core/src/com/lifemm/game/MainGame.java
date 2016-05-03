@@ -57,7 +57,7 @@ public class MainGame implements Screen {
    public Stopwatch time;
     
    // Function that gets called once to prepare everything needed for render
-    public MainGame (final LifeMM game) {
+   public MainGame (final LifeMM game) {
       this.game = game;
 
       // One of a kind entities
@@ -90,42 +90,14 @@ public class MainGame implements Screen {
       clouds.add(new Cloud(2, 0, 0));
     }
 
-   public void renderBG() {
-      game.batch.draw(backgroundTexture, 0, 0);
-      game.batch.draw(floorTexture, 0, 0);
-      for (int i = 0; i < clouds.size(); i++) {
-         game.batch.draw(clouds.get(i).getCurrentTexture(), clouds.get(i).getLocation().x, clouds.get(i).getLocation().y);
-         if (clouds.get(i).getLocation().x > 1800) {
-            clouds.get(i).getLocation().x = -256;
-         }
+    @Override
+    public void render (float delta) {
+      if (state == MainGameState.PLAY) {
+         doPlay(); 
+      } else {
+         doPaused();
       }
-   }
-
-   void updateCloudsPosition() {
-      Entity temp;
-      for (int i = 0; i < clouds.size(); i++) {
-         temp = clouds.get(i);
-         temp.update();
-      }
-   }
-   
-   void printDebugInfo() {
-      System.out.println("DEBUG INFO");
-      System.out.println("--------------------------------------");
-      System.out.println("Waldo State: " + waldo.getState());
-      System.out.println("Waldo X: " + (waldo.getLocation().x + waldo.getLocation().width/2));
-      System.out.println("Waldo Y: " + waldo.getLocation().y);
-      System.out.println("Waldo Yvel: " + waldo.getYVelocity());
-      System.out.println("Waldo Yacc: " + waldo.getYAcceleration());
-      System.out.println("Waldo Xvel: " + waldo.getXVelocity());
-      System.out.println("Waldo Xacc: " + waldo.getXAcceleration());
-      System.out.println("Waldo Health: " + waldo.getHealth());
-      System.out.println("Waldo Direction: " + waldo.getDirection());
-      System.out.println("Treasure X: " + (treasure.getLocation().x + treasure.getLocation().width/2));
-      System.out.println("Treasure Health: " + treasure.getHealth());
-      System.out.println("--------------------------------------");
-      System.out.println("");
-   }
+    }
 
    public void doPlay() {
       // Clears the screen, don't remove
@@ -189,8 +161,8 @@ public class MainGame implements Screen {
 
       font.draw(game.batch, "Health " + (int)waldo.getHealth(), 1100, 800);
       font.draw(game.batch, "Lives " + waldo.getLives(), 1100, 750);
-      font.draw(game.batch, "Score " + waldo.getScore(), 1100, 700);      
-      font.draw(game.batch, "Time " + (int)time.getTime(), 1100, 650);
+      font.draw(game.batch, "Time " + (int)time.getTime(), 1100, 700);
+      font.draw(game.batch, "Score " + waldo.getScore(), 1100, 100);      
          
       time.lap();
       
@@ -199,81 +171,6 @@ public class MainGame implements Screen {
       renderCrates();
       renderEnemies();
       game.batch.end();
-   }
-
-   public void updateEnemiesState() {
-   for (Enemy s : enemies) {
-         s.updateStateTime();
-         boolean move = true;
-         for (Entity c : crates) {
-            if (isCollision(s.getLocation(), c.getLocation())) {
-               move = false;
-               if (s.getState() != ATTACKING) {
-                  s.setState(ATTACKING);
-                  c.setHealth(c.getHealth() - s.getDamage());
-               }
-            }
-         }
-         if (isCollision(s.getLocation(), waldo.getLocation())) {
-            move = false;
-            if (s.getState() != ATTACKING) {
-               s.setState(ATTACKING);
-               waldo.setHealth(waldo.getHealth() - s.getDamage());
-            }
-         }
-         if (isCollision(s.getLocation(), treasure.getLocation())) {
-            move = false;
-            if (s.getState() != ATTACKING) {
-               s.setState(ATTACKING);
-               treasure.setHealth(treasure.getHealth() - s.getDamage());
-            }
-         }
-         if (move) {
-            s.update();
-         }
-         if (s.getTimeInState() > s.getAttackInterval()) {
-            s.setState(MOVING);
-         }
-      }
-   }
-
-   public void doPaused() {
-      game.batch.begin();
-      font.draw(game.batch, "Paused", 1440/2 - 100, 810/2);
-      if (framesInState > 20 && Gdx.input.isKeyPressed(Keys.P)) {
-         state = MainGameState.PLAY;
-         framesInState = 0;
-      }
-      game.batch.end();
-      framesInState++;
-   }
-
-    @Override
-    public void render (float delta) {
-      if (state == MainGameState.PLAY) {
-         doPlay(); 
-      } else {
-         doPaused();
-      }
-
-   }
-
-   // Check what enemies are alive
-   public void deleteDeadEnemies() {
-      for (int i = 0; i < enemies.size(); i++) {
-         if (enemies.get(i).getHealth() <= 0) {
-            enemies.remove(enemies.get(i));
-         }
-      }
-   }
-
-   // Check what crates are alive
-   public void deleteDeadCrates() {
-      for (int i = 0; i < crates.size(); i++) {
-         if (crates.get(i).getHealth() <= 0) {
-            crates.remove(crates.get(i));
-         }
-      }
    }
 
    // Update the state and position of the main character based on user input
@@ -344,6 +241,109 @@ public class MainGame implements Screen {
       }
    }
 
+   public void updateEnemiesState() {
+      for (Enemy s : enemies) {
+         s.updateStateTime();
+         boolean move = true;
+         for (Entity c : crates) {
+            if (isCollision(s.getLocation(), c.getLocation())) {
+               move = false;
+               if (s.getState() != ATTACKING) {
+                  s.setState(ATTACKING);
+                  c.setHealth(c.getHealth() - s.getDamage());
+               }
+            }
+         }
+         if (isCollision(s.getLocation(), waldo.getLocation())) {
+            move = false;
+            if (s.getState() != ATTACKING) {
+               s.setState(ATTACKING);
+               waldo.setHealth(waldo.getHealth() - s.getDamage());
+            }
+         }
+         if (isCollision(s.getLocation(), treasure.getLocation())) {
+            move = false;
+            if (s.getState() != ATTACKING) {
+               s.setState(ATTACKING);
+               treasure.setHealth(treasure.getHealth() - s.getDamage());
+            }
+         }
+         if (move) {
+            s.update();
+         }
+         if (s.getTimeInState() > s.getAttackInterval()) {
+            s.setState(MOVING);
+         }
+      }
+   }
+
+   public void doPaused() {
+      game.batch.begin();
+      font.draw(game.batch, "Paused", 1440/2 - 100, 810/2);
+      if (framesInState > 20 && Gdx.input.isKeyPressed(Keys.P)) {
+         state = MainGameState.PLAY;
+         framesInState = 0;
+      }
+      game.batch.end();
+      framesInState++;
+   }
+
+   public void renderBG() {
+      game.batch.draw(backgroundTexture, 0, 0);
+      game.batch.draw(floorTexture, 0, 0);
+      for (int i = 0; i < clouds.size(); i++) {
+         game.batch.draw(clouds.get(i).getCurrentTexture(), clouds.get(i).getLocation().x, clouds.get(i).getLocation().y);
+         if (clouds.get(i).getLocation().x > 1800) {
+            clouds.get(i).getLocation().x = -256;
+         }
+      }
+   }
+
+   void updateCloudsPosition() {
+      Entity temp;
+      for (int i = 0; i < clouds.size(); i++) {
+         temp = clouds.get(i);
+         temp.update();
+      }
+   }
+   
+   void printDebugInfo() {
+      System.out.println("DEBUG INFO");
+      System.out.println("--------------------------------------");
+      System.out.println("Waldo State: " + waldo.getState());
+      System.out.println("Waldo X: " + (waldo.getLocation().x + waldo.getLocation().width/2));
+      System.out.println("Waldo Y: " + waldo.getLocation().y);
+      System.out.println("Waldo Yvel: " + waldo.getYVelocity());
+      System.out.println("Waldo Yacc: " + waldo.getYAcceleration());
+      System.out.println("Waldo Xvel: " + waldo.getXVelocity());
+      System.out.println("Waldo Xacc: " + waldo.getXAcceleration());
+      System.out.println("Waldo Health: " + waldo.getHealth());
+      System.out.println("Waldo Direction: " + waldo.getDirection());
+      System.out.println("Treasure X: " + (treasure.getLocation().x + treasure.getLocation().width/2));
+      System.out.println("Treasure Health: " + treasure.getHealth());
+      System.out.println("--------------------------------------");
+      System.out.println("");
+   }
+
+   // Check what enemies are alive
+   public void deleteDeadEnemies() {
+      for (int i = 0; i < enemies.size(); i++) {
+         if (enemies.get(i).getHealth() <= 0) {
+            enemies.remove(enemies.get(i));
+            waldo.addScore(100);
+         }
+      }
+   }
+
+   // Check what crates are alive
+   public void deleteDeadCrates() {
+      for (int i = 0; i < crates.size(); i++) {
+         if (crates.get(i).getHealth() <= 0) {
+            crates.remove(crates.get(i));
+         }
+      }
+   }
+   
    void boundsCheckWaldo() {
       if (waldo.getLocation().y < FLOOR) {
          waldo.setYAcceleration(0);

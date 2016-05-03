@@ -112,6 +112,10 @@ public class Waldo extends Entity {
    public int getScore() {
       return score;
    }
+
+   public void addScore(int points) {
+      this.score += points;
+   }
   
    public int getLives() {
       return lives;
