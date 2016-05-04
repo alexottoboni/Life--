@@ -16,4 +16,8 @@ public class Score {
     public int getScore() {
         return score;
     }
+
+    public String toString() {
+        return name + ": " + score;
+    }
 }

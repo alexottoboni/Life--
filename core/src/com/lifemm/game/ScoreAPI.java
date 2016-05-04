@@ -9,29 +9,33 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.LinkedList;
+
+import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.JsonReader;
 
 public class ScoreAPI {
 
-    public static void saveScore(String name, int score) {
-        try {
-            String url = "http://www.taysoftware.website/LiMe/index.php?name=" + name + "&score=" + score;
-            String response = doHttpUrlConnectionAction(url);
-            System.out.println(url);
-            System.out.println(response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void saveScore(String name, int score) throws Exception {
+        String url = "http://lime.taysoftware.website?name=" + name + "&score=" + score;
+        String response = doHttpUrlConnectionAction(url);
     }
 
     public static List<Score> getScores() {
+        LinkedList<Score> result = new LinkedList<Score>();
         try {
-            String url = "http://www.taysoftware.website/LiMe/index.php";
+            String url = "http://lime.taysoftware.website/";
             String response = doHttpUrlConnectionAction(url);
-            System.out.println(response);
+            JsonReader reader = new JsonReader();
+            JsonValue head = reader.parse(response);
+            head = head.get("highscores");
+            for (JsonValue entry = head.child; entry != null; entry = entry.next) {
+                result.add(new Score(entry.getString("name"), entry.getInt("score")));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return result;
     }
     
     private static String doHttpUrlConnectionAction(String desiredUrl) throws Exception {
