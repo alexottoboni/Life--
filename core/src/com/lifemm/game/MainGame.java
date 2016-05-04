@@ -286,6 +286,8 @@ public class MainGame implements Screen {
       }
       game.batch.end();
       framesInState++;
+      
+      time.restart();
    }
 
    public void renderBG() {
