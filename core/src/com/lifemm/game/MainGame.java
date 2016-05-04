@@ -58,6 +58,8 @@ public class MainGame implements Screen {
     
    // Function that gets called once to prepare everything needed for render
    public MainGame (final LifeMM game) {
+      ScoreAPI.saveScore("Wyatt", 102039);
+      ScoreAPI.getScores();
       this.game = game;
 
       // One of a kind entities
