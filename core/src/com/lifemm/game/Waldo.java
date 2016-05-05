@@ -7,7 +7,6 @@ public class Waldo extends Entity {
    private static final int FLOOR = 235;
    private static final int ATTACKING = 1;
    private static final int MOVING = 2;
-   private static final int JUMPING = 3;
    private static final int BUILDING = 4;
 
    private int timeInState;
