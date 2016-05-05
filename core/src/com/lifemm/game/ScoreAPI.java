@@ -33,7 +33,7 @@ public class ScoreAPI {
     @param name The name of the player to save.
     @param score The score the player earned.
     */
-    public void saveScore(String name, int score) {
+    public void saveScore(String name, int score) throws IOException {
         String url = "http://lime.taysoftware.website?name=" + name + "&score=" + score;
         try {
             doHttpUrlConnectionAction(url);
@@ -46,7 +46,7 @@ public class ScoreAPI {
     Returns a list of high scores.
     @return A List of Scores.
     */
-    public List<Score> getScores() {
+    public List<Score> getScores() throws IOException {
         LinkedList<Score> result = new LinkedList<>();
         try {
             String url = "http://lime.taysoftware.website/";
@@ -57,8 +57,6 @@ public class ScoreAPI {
             for (JsonValue entry = head.child; entry != null; entry = entry.next) {
                 result.add(new Score(entry.getString("name"), entry.getInt("score")));
             }
-        } catch (IOException e) {
-            throw e;
         } catch (Exception e) {
             throw e;
         }
@@ -78,15 +76,12 @@ public class ScoreAPI {
         connection.setReadTimeout(15*1000);
         connection.connect();
  
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {    
-            stringBuilder = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line + "\n");
-            }
-            return stringBuilder.toString();
-        } catch (IOException e) {
-            throw e;
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        stringBuilder = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            stringBuilder.append(line + "\n");
         }
+        return stringBuilder.toString();
     }
 }
