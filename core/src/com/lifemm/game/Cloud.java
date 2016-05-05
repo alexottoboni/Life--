@@ -1,12 +1,10 @@
 package com.lifemm.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Cloud extends Entity{
 
-   private int speed;
    private Texture fullHealthTexture;
 
    Cloud(int texNum, int offsetX, int offsetY) {
