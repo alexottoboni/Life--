@@ -35,11 +35,7 @@ public class ScoreAPI {
     */
     public void saveScore(String name, int score) throws IOException {
         String url = "http://lime.taysoftware.website?name=" + name + "&score=" + score;
-        try {
-            doHttpUrlConnectionAction(url);
-        } catch (IOException e) {
-            throw e;
-        }
+        doHttpUrlConnectionAction(url);
     }
 
     /**
@@ -48,17 +44,13 @@ public class ScoreAPI {
     */
     public List<Score> getScores() throws IOException {
         LinkedList<Score> result = new LinkedList<>();
-        try {
-            String url = "http://lime.taysoftware.website/";
-            String response = doHttpUrlConnectionAction(url);
-            JsonReader reader = new JsonReader();
-            JsonValue head = reader.parse(response);
-            head = head.get("highscores");
-            for (JsonValue entry = head.child; entry != null; entry = entry.next) {
-                result.add(new Score(entry.getString("name"), entry.getInt("score")));
-            }
-        } catch (Exception e) {
-            throw e;
+        String url = "http://lime.taysoftware.website/";
+        String response = doHttpUrlConnectionAction(url);
+        JsonReader reader = new JsonReader();
+        JsonValue head = reader.parse(response);
+        head = head.get("highscores");
+        for (JsonValue entry = head.child; entry != null; entry = entry.next) {
+            result.add(new Score(entry.getString("name"), entry.getInt("score")));
         }
         return result;
     }
