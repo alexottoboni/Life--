@@ -38,7 +38,7 @@ public class ScoreAPI {
         try {
             doHttpUrlConnectionAction(url);
         } catch (IOException e) {
-            System.err.println("Failed to save score");
+            throw e;
         }
     }
 
@@ -58,7 +58,9 @@ public class ScoreAPI {
                 result.add(new Score(entry.getString("name"), entry.getInt("score")));
             }
         } catch (IOException e) {
-            System.err.println("Failed to get high scores. Go pester Wyatt.");
+            throw e;
+        } catch (Exception e) {
+            throw e;
         }
         return result;
     }
@@ -84,7 +86,6 @@ public class ScoreAPI {
             }
             return stringBuilder.toString();
         } catch (IOException e) {
-            e.printStackTrace();
             throw e;
         }
     }
