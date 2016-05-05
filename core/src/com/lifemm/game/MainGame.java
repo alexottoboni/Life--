@@ -27,6 +27,14 @@ public class MainGame implements Screen {
    Waldo waldo;
    Treasure treasure;
 
+   // Levels and Number of Enemies killed
+   int level;
+   int enemiesKilled;
+   boolean newLevel;
+   int pauseFrames;
+   int enemiesInLevel;
+
+
    // Fonts
    BitmapFont font;
   
@@ -94,6 +102,12 @@ public class MainGame implements Screen {
       enemies.add(new Spider());
       clouds.add(new Cloud(1, 300, -100));
       clouds.add(new Cloud(2, 0, 0));
+
+      level = 1;
+      enemiesKilled = 0;
+      newLevel = false;
+      pauseFrames = 200;
+      enemiesInLevel = 2;
     }
 
     @Override
@@ -124,7 +138,7 @@ public class MainGame implements Screen {
 
       if (waldo.getHealth() <= 0) {
          waldo.decrementLives();
-         waldo.setX(1440/2);
+         waldo.setX(waldo.getLocation().x);
          waldo.setHealth(100);
       }
 
@@ -158,7 +172,23 @@ public class MainGame implements Screen {
 
       updateCloudsPosition();
 
-      updateEnemiesState();
+
+      // if the game is entering a new level,
+      // then increment the number of pause frames until
+      // the pause has been met.
+      if (newLevel) {
+         pauseFrames++;
+         if (pauseFrames > 200) {
+            newLevel = false;
+         }
+      }
+
+      // if the game is not entering a new level, then updated
+      // the state of the current enemies
+      if (!newLevel) { 
+         updateEnemiesState();
+      }
+
 
       game.batch.begin();
       renderBG();
@@ -168,14 +198,26 @@ public class MainGame implements Screen {
       font.draw(game.batch, "Health " + (int)waldo.getHealth(), 1100, 800);
       font.draw(game.batch, "Lives " + waldo.getLives(), 1100, 750);
       font.draw(game.batch, "Time " + (int)time.getTime(), 1100, 700);
+      font.draw(game.batch, "Level " + level , 600, 800);
+      // if the game is entering a new level, then display the level number
+      // at the center of the screen
+      if (newLevel)
+      {
+         font.draw(game.batch, "Level " + level, 1440/2 - 100, 810/2);
+      }
       font.draw(game.batch, "Score " + waldo.getScore(), 1100, 100);      
-         
+
       time.lap();
       
       deleteDeadEnemies();
       deleteDeadCrates();
       renderCrates();
-      renderEnemies();
+
+      if (!newLevel)
+      {
+         renderEnemies();
+      }
+
       game.batch.end();
    }
 
@@ -337,8 +379,28 @@ public class MainGame implements Screen {
    public void deleteDeadEnemies() {
       for (int i = 0; i < enemies.size(); i++) {
          if (enemies.get(i).getHealth() <= 0) {
+            enemiesKilled++;
             enemies.remove(enemies.get(i));
-            waldo.addScore(100);
+            waldo.addScore(1000);
+            // create a new ememy to appear on the left side of the game field
+            if (enemiesKilled%2 == 1) {
+               Spider leftSpider = new Spider(Entity.Direction.LEFT);
+               enemies.add(leftSpider);
+            }
+            // create a new ememy to appear on the right side fo the game field
+	    else {
+               Spider rightSpider = new Spider(Entity.Direction.RIGHT);
+               enemies.add(rightSpider);
+            }
+           // if 5 enemies have been killed, then go to the next level
+           // and setup pauseFrames
+            if (enemiesKilled == enemiesInLevel) {
+                enemiesKilled = 0;
+                enemiesInLevel += 5;
+                newLevel = true;
+                pauseFrames = 0;
+                level++;
+           }
          }
       }
    }
