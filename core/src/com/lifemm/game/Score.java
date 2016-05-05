@@ -2,11 +2,11 @@ package com.lifemm.game;
 
 public class Score {
     private String name;
-    private int score;
+    private int scoreValue;
 
     public Score(String name, int score) {
         this.name = name;
-        this.score = score;
+        this.scoreValue = score;
     }
 
     public String getName() {
@@ -14,10 +14,11 @@ public class Score {
     }
 
     public int getScore() {
-        return score;
+        return scoreValue;
     }
 
+    @Override
     public String toString() {
-        return name + ": " + score;
+        return name + ": " + scoreValue;
     }
 }
