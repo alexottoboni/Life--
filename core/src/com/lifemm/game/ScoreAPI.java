@@ -33,9 +33,13 @@ public class ScoreAPI {
     @param name The name of the player to save.
     @param score The score the player earned.
     */
-    public void saveScore(String name, int score) throws IOException {
+    public void saveScore(String name, int score) {
         String url = "http://lime.taysoftware.website?name=" + name + "&score=" + score;
-        doHttpUrlConnectionAction(url);
+        try {
+            doHttpUrlConnectionAction(url);
+        } catch (IOException e) {
+            System.err.println("Failed to save score");
+        }
     }
 
     /**
@@ -54,7 +58,7 @@ public class ScoreAPI {
                 result.add(new Score(entry.getString("name"), entry.getInt("score")));
             }
         } catch (IOException e) {
-            System.out.println("Failed to get high scores. Go pester Wyatt.");
+            System.err.println("Failed to get high scores. Go pester Wyatt.");
         }
         return result;
     }
@@ -64,9 +68,8 @@ public class ScoreAPI {
     @param desiredUrl The url that will be hit by the method.
     */
     private String doHttpUrlConnectionAction(String desiredUrl) throws IOException {
-        URL url = null;
         StringBuilder stringBuilder;
-        url = new URL(desiredUrl);
+        URL url = new URL(desiredUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
            
@@ -75,7 +78,7 @@ public class ScoreAPI {
  
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {    
             stringBuilder = new StringBuilder();
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
                 stringBuilder.append(line + "\n");
             }
