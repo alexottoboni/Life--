@@ -1,8 +1,6 @@
 package com.lifemm.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Rectangle;
 
 public class Waldo extends Entity {
 
@@ -44,39 +42,15 @@ public class Waldo extends Entity {
       if (this.state == ATTACKING) {
          if (this.direction == Entity.Direction.LEFT) {
             return this.leftAttackTexture;
-         } else if (this.direction == Entity.Direction.RIGHT) {
+         } else {
             return this.rightAttackTexture;
-         } else {
-            return this.leftTexture;
-         }
-         //return this.leftTexture;
-      } else if (this.state == MOVING) {
-
-         if (this.direction == Entity.Direction.LEFT) {
-            return this.leftTexture;
-         } else if (this.direction == Entity.Direction.RIGHT) {
-            return this.rightTexture;
-         } else {
-            return this.leftTexture;
-         }
-      } else if (this.state == JUMPING) {
-         if (this.direction == Entity.Direction.LEFT) {
-            return this.leftTexture;
-         } else if (this.direction == Entity.Direction.RIGHT) {
-            return this.rightTexture;
-         } else {
-            return this.leftTexture;
-         }
-      } else if (this.state == BUILDING) {
-         if (this.direction == Entity.Direction.LEFT) {
-            return this.leftTexture;
-         } else if (this.direction == Entity.Direction.RIGHT) {
-            return this.rightTexture;
-         } else {
-            return this.leftTexture;
          }
       } else {
-         return this.leftTexture;
+         if (this.direction == Entity.Direction.LEFT) {
+            return this.leftTexture;
+         } else {
+            return this.rightTexture;
+         }
       }
    }
 
@@ -89,10 +63,8 @@ public class Waldo extends Entity {
          if (this.timeInState > 100) {
             this.setState(MOVING);
          }       
-      } else if (this.state == ATTACKING) {
-         if (this.timeInState > 40) {
-            this.setState(MOVING);
-         }
+      } else if (this.state == ATTACKING && this.timeInState > 40) {
+         this.setState(MOVING);
       }
    }
 
