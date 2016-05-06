@@ -13,7 +13,7 @@ import com.badlogic.gdx.Screen;
 
 import java.util.ArrayList;
 
-public class Tutorial implements Screen {
+public class Tutorial extends ScreenOverride {
    final LifeMM game;
    
    // States
@@ -70,8 +70,8 @@ public class Tutorial implements Screen {
       hasKilledEnemy = false;
 
       // Initialize lists
-      crates = new ArrayList<Entity>();
-      enemies = new ArrayList<Enemy>();
+      crates = new ArrayList<>();
+      enemies = new ArrayList<>();
 
       // Generate the font we use
       FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("GROBOLD.ttf"));
@@ -267,7 +267,7 @@ public class Tutorial implements Screen {
 
    // Update the state and position of the main character based on user input
    public void updateWaldoMovement() {
-    if (Gdx.input.isKeyPressed(Keys.UP)) {
+    if (Gdx.input.isKeyPressed(Keys.UP) && waldo.getLocation().y == FLOOR) {
          if (waldo.getLocation().y == FLOOR) {
             waldo.setYVelocity(15);
             waldo.setYAcceleration(-1);
@@ -275,13 +275,11 @@ public class Tutorial implements Screen {
          hasJumped = true;
       }
 
-      if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-         if (waldo.getState() != ATTACKING) {
-            waldo.setState(ATTACKING);
-            for (Entity s : enemies) {
-               if (isAttackCollision(waldo, s)) {
-                  s.setHealth(s.getHealth() - 300);
-               }
+      if (Gdx.input.isKeyPressed(Keys.SPACE) && waldo.getState() != ATTACKING) {
+         waldo.setState(ATTACKING);
+         for (Entity s : enemies) {
+            if (isAttackCollision(waldo, s)) {
+               s.setHealth(s.getHealth() - 300);
             }
          }
       }
@@ -302,22 +300,20 @@ public class Tutorial implements Screen {
          waldo.setXVelocity(0);
       }
 
-      if (Gdx.input.isKeyPressed(Keys.A)) {
-         if (waldo.getState() != BUILDING) {
-            Rectangle temp = new Rectangle(waldo.getLocation());
-            if (waldo.getDirection() == Entity.Direction.LEFT) {
-               temp.x -= 129;
-            } else {
-               temp.x += 129;
-            }
+      if (Gdx.input.isKeyPressed(Keys.A) && waldo.getState() != BUILDING) {
+         Rectangle temp = new Rectangle(waldo.getLocation());
+         if (waldo.getDirection() == Entity.Direction.LEFT) {
+            temp.x -= 129;
+         } else {
+            temp.x += 129;
+         }
 
-            waldo.setState(BUILDING);
-            hasPlacedBlock = true;
-            if (waldo.getDirection() == Entity.Direction.LEFT) {
-               crates.add(new Crate(waldo.getLocation().x - 128));
-            } else {
-               crates.add(new Crate(waldo.getLocation().x + 128));
-            }
+         waldo.setState(BUILDING);
+         hasPlacedBlock = true;
+         if (waldo.getDirection() == Entity.Direction.LEFT) {
+            crates.add(new Crate(waldo.getLocation().x - 128));
+         } else {
+            crates.add(new Crate(waldo.getLocation().x + 128));
          }
       }
    }
@@ -343,29 +339,4 @@ public class Tutorial implements Screen {
          }
       }
    }
-
-   @Override
-   public void resize(int width, int height) {
-   }
-
-   @Override
-   public void show() {
-   }
-
-   @Override
-   public void hide() {
-   }
-
-   @Override
-   public void pause() {
-   }
-
-   @Override
-   public void resume() {
-   }
-
-   @Override
-   public void dispose() {
-   }
-
 }
