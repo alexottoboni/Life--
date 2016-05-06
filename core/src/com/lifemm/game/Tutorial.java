@@ -191,7 +191,7 @@ public class Tutorial implements Screen {
       font.draw(game.batch, "Press 'SPACE' to attack", 1440/2 - 400, 600);
       renderCrates();
       game.batch.end();
-      if (hasKilledEnemy == true) {
+      if (hasKilledEnemy) {
          this.setTutorialState(TutorialState.FINISHED);
       }
    }
