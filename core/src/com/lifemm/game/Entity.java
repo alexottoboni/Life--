@@ -7,14 +7,14 @@ This represents a basic on screen object.
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.Texture;
 
-abstract public class Entity {
+public abstract class Entity {
     private static final int FLOOR = 235;
     public enum Direction {UP, DOWN, LEFT, RIGHT};
     protected Rectangle location;
-    private float x_velocity;
-    private float y_velocity;
-    private float x_acceleration;
-    private float y_acceleration;
+    private float xVelocity;
+    private float yVelocity;
+    private float xAcceleration;
+    private float yAcceleration;
     private float health;
     protected Direction direction;
 
@@ -27,14 +27,14 @@ abstract public class Entity {
     }
 
     public void update() {
-        location.x += x_velocity;
-        if (location.y + y_velocity < FLOOR) {
+        location.x += xVelocity;
+        if (location.y + yVelocity < FLOOR) {
            location.y = FLOOR;
         } else {
-           location.y += y_velocity;
+           location.y += yVelocity;
         }
-        x_velocity += x_acceleration;
-        y_velocity += y_acceleration;
+        xVelocity += xAcceleration;
+        yVelocity += yAcceleration;
     }
 
     public void setHeight(float height) {
@@ -68,32 +68,32 @@ abstract public class Entity {
     }
 
     public void setXVelocity(float xvel) {
-        x_velocity = xvel;
+        xVelocity = xvel;
     }
 
     public float getXVelocity() {
-        return x_velocity;
+        return xVelocity;
     }
 
     public void setYVelocity(float yvel) {
-        y_velocity = yvel;
+        yVelocity = yvel;
     }
     public float getYVelocity() {
-        return y_velocity;
+        return yVelocity;
     }
 
     public void setXAcceleration(float xacc) {
-        x_acceleration = xacc;
+        xAcceleration = xacc;
     }
     public float getXAcceleration() {
-        return x_acceleration;
+        return xAcceleration;
     }
 
     public void setYAcceleration(float yacc) {
-        y_acceleration = yacc;
+        yAcceleration = yacc;
     }
     public float getYAcceleration() {
-        return y_acceleration;
+        return yAcceleration;
     }
 
     public Direction getDirection() {
