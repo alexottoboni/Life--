@@ -15,6 +15,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.audio.Sound;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainGame implements Screen {
@@ -33,7 +34,6 @@ public class MainGame implements Screen {
    boolean newLevel;
    int pauseFrames;
    int enemiesInLevel;
-
 
    // Fonts
    BitmapFont font;
@@ -138,11 +138,21 @@ public class MainGame implements Screen {
 
       if (waldo.getLives() == 0) {
          game.setScreen(new MainMenu(game));
+         try {
+            ScoreAPI.getInstance().saveScore("Player1", waldo.getScore());
+         } catch(IOException e) {
+            
+         }
          dispose();
       }
 
       if (treasure.getHealth() <= 0) {
          game.setScreen(new MainMenu(game));
+         try {
+            ScoreAPI.getInstance().saveScore("Player1", waldo.getScore());
+         } catch(IOException e) {
+
+         }
          dispose();
       }
 

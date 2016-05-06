@@ -18,24 +18,27 @@ public class MainMenu implements Screen {
    public static Texture backgroundTexture;
    public static Texture play;
    public static Texture selectedPlay;
-   public static Texture controls;
-   public static Texture selectedControls;
    public static Texture tutorial;
    public static Texture selectedTutorial;
+   public static Texture highscores;
+   public static Texture selectedHighscores;
    public int buttonSelection;
 
    // Sounds
    public static Sound bgSound;
 
+   int delaySelection;
+
    public MainMenu (final LifeMM game) {
       this.game = game;
+      this.delaySelection = 15;
       this.buttonSelection = 0;
       selectedPlay = new Texture("playbuttonselected.png");
       play = new Texture("playbutton.png");
-      controls = new Texture("controlsbutton.png");
-      selectedControls = new Texture("controlsbuttonselected.png");
       tutorial = new Texture("tutorialbutton.png");
       selectedTutorial = new Texture("tutorialbuttonselected.png");
+      highscores = new Texture("highscorebutton.png");
+      selectedHighscores = new Texture("highscorebuttonselected.png");
       backgroundTexture = new Texture("bg4.png");
       FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("GROBOLD.ttf"));
       FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -56,7 +59,8 @@ public class MainMenu implements Screen {
             game.setScreen(new MainGame(game));
             dispose();
          } else if (buttonSelection == 1) {
-
+            game.setScreen(new HighscoreScreen(game));
+            dispose();
          } else if (buttonSelection == 2) {
             game.setScreen(new Tutorial(game));
             dispose();
@@ -65,16 +69,18 @@ public class MainMenu implements Screen {
          }
       }
 
-      if (Gdx.input.isKeyPressed(Keys.UP)) {
+      if (Gdx.input.isKeyPressed(Keys.UP) && delaySelection < 0) {
          if (buttonSelection > 0) {
             buttonSelection--;
          }
+         delaySelection = 15;
       }
 
-      if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+      if (Gdx.input.isKeyPressed(Keys.DOWN) && delaySelection < 0) {
          if (buttonSelection < 2) {
             buttonSelection++;
          }
+         delaySelection = 15;
       }
 
       game.batch.begin();
@@ -83,6 +89,7 @@ public class MainMenu implements Screen {
       titleFont.draw(game.batch, "Press Enter", 1440/2 - 200, 200);
       drawButtons();
       game.batch.end();
+      delaySelection--;
    }
 
    void drawButtons() {
@@ -93,9 +100,9 @@ public class MainMenu implements Screen {
       }
 
       if (buttonSelection == 1) {
-         game.batch.draw(selectedControls, 1440/2 - 128, 350);
+         game.batch.draw(selectedHighscores, 1440/2 - 128, 350);
       } else {
-         game.batch.draw(controls, 1440/2 - 128, 350);
+         game.batch.draw(highscores, 1440/2 - 128, 350);
       }
 
       if (buttonSelection == 2) {

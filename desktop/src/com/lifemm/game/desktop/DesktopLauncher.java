@@ -10,6 +10,7 @@ public class DesktopLauncher {
       config.title = "Life--";
       config.width = 1440;
       config.height = 810;
-		new LwjglApplication(new LifeMM(), config);
+		LwjglApplication game = new LwjglApplication(new LifeMM(), config);
+      System.out.println(game.toString());
 	}
 }
