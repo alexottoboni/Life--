@@ -15,6 +15,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.audio.Sound;
 
+import java.io.IOException;
 import java.util.List;
 
 public class HighscoreScreen implements Screen {
@@ -28,8 +29,11 @@ public class HighscoreScreen implements Screen {
   
    public HighscoreScreen (final LifeMM game) {
       this.game = game;
-      highscores = ScoreAPI.getInstance().getScores();
+      try {
+         highscores = ScoreAPI.getInstance().getScores();
+      } catch (IOException e) {
 
+      }
       // Generate the font we use
       FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("GROBOLD.ttf"));
       FreeTypeFontParameter parameter = new FreeTypeFontParameter();
