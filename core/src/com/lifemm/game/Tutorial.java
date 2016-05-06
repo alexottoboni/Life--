@@ -333,11 +333,7 @@ public class Tutorial implements Screen {
          requiredDirection = Entity.Direction.RIGHT;
       }
 
-      if ((waldo.getDirection() == requiredDirection) && Math.abs(distance) < 150) {
-         return true;
-      } else {
-         return false;
-      }
+      return (waldo.getDirection() == requiredDirection) && Math.abs(distance) < 150;
    }
 
    public void renderEnemies() {
