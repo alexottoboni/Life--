@@ -141,9 +141,7 @@ public class Tutorial implements Screen {
       font.draw(game.batch, "Press the arrow keys to move", 1440/2 - 400, 600);
       game.batch.end();
 
-      if (hasMovedRight == true
-          && hasMovedLeft == true
-          && hasJumped == true) {
+      if (hasMovedRight && hasMovedLeft && hasJumped) {
          this.setTutorialState(TutorialState.PLACEBLOCK);
       }
    }
@@ -167,7 +165,7 @@ public class Tutorial implements Screen {
       font.draw(game.batch, "Press 'A' to place a block", 1440/2 - 400, 600);
       renderCrates();
       game.batch.end();
-      if (hasPlacedBlock == true) {
+      if (hasPlacedBlock) {
          this.setTutorialState(TutorialState.ATTACK);
       }
    }
