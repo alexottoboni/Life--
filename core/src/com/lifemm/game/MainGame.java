@@ -1,10 +1,8 @@
 package com.lifemm.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,11 +10,11 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.audio.Sound;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainGame implements Screen {
    
@@ -39,16 +37,16 @@ public class MainGame implements Screen {
    BitmapFont font;
   
    // List of entities that currently exist
-   public ArrayList<Enemy> enemies;
-   public ArrayList<Entity> crates;
-   public ArrayList<Entity> clouds;
+   private List<Enemy> enemies;
+   private List<Entity> crates;
+   private List<Entity> clouds;
 
    // Textures for the background and floor
-   public static Texture backgroundTexture;
-   public static Texture floorTexture;
+   private static Texture backgroundTexture;
+   private static Texture floorTexture;
 
    // Sounds
-   public static Sound bgSound;
+   private static Sound bgSound;
 
    // Constants
    private static final int FLOOR = 235;
@@ -60,9 +58,9 @@ public class MainGame implements Screen {
    private static final int RIGHT = 1;
    
    // Globals
-   public MainGameState state = MainGameState.PLAY;
-   public int framesInState;
-   public Stopwatch time;
+   private MainGameState state = MainGameState.PLAY;
+   private int framesInState;
+   private Stopwatch time;
     
    // Function that gets called once to prepare everything needed for render
    public MainGame (final LifeMM game) {
@@ -90,9 +88,9 @@ public class MainGame implements Screen {
       font = generator.generateFont(parameter);
 
       // Create lists of entities 
-      crates = new ArrayList<Entity>();
-      clouds = new ArrayList<Entity>();
-      enemies = new ArrayList<Enemy>();
+      crates = new ArrayList<>();
+      clouds = new ArrayList<>();
+      enemies = new ArrayList<>();
       enemies.add(new Spider());
       clouds.add(new Cloud(1, 300, -100));
       clouds.add(new Cloud(2, 0, 0));
@@ -227,23 +225,19 @@ public class MainGame implements Screen {
 
    // Update the state and position of the main character based on user input
    public void updateWaldoMovement() {
-    if (Gdx.input.isKeyPressed(Keys.UP)) {
-         if (waldo.getLocation().y == FLOOR) {
-            waldo.setYVelocity(15);
-            waldo.setYAcceleration(-1);
-         }
+    if (Gdx.input.isKeyPressed(Keys.UP) && waldo.getLocation().y == FLOOR) {
+         waldo.setYVelocity(15);
+         waldo.setYAcceleration(-1);
       }
 
-      if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-         if (waldo.getState() != ATTACKING) {
-            waldo.setState(ATTACKING);
-            for (Entity s : enemies) {
-               if (isAttackCollision(waldo, s)) {
-                  s.setHealth(s.getHealth() - 300);
-               }
-               // Debug Output
-               System.out.println(isAttackCollision(waldo, s));
+      if (Gdx.input.isKeyPressed(Keys.SPACE) && waldo.getState() != ATTACKING) {
+         waldo.setState(ATTACKING);
+         for (Entity s : enemies) {
+            if (isAttackCollision(waldo, s)) {
+               s.setHealth(s.getHealth() - 300);
             }
+            // Debug Output
+            System.out.println(isAttackCollision(waldo, s));
          }
       }
 
@@ -261,34 +255,32 @@ public class MainGame implements Screen {
          waldo.setXVelocity(0);
       }
 
-      if (Gdx.input.isKeyPressed(Keys.A)) {
-         if (waldo.getState() != BUILDING) {
-            Rectangle temp = new Rectangle(waldo.getLocation());
-            if (waldo.getDirection() == Entity.Direction.LEFT) {
-               temp.x -= 129;
-            } else {
-               temp.x += 129;
-            }
+      if (Gdx.input.isKeyPressed(Keys.A) && waldo.getState() != BUILDING) {
+         Rectangle temp = new Rectangle(waldo.getLocation());
+         if (waldo.getDirection() == Entity.Direction.LEFT) {
+            temp.x -= 129;
+         } else {
+            temp.x += 129;
+         }
 
-            // Check for collisions
-            for (int i = 0; i < crates.size(); i++) {
-               if (isCollision(crates.get(i).getLocation(), temp)) {
-                  System.out.println("Can't place block here");
-                  return;
-               }
-            }
-
-            if (isCollision(treasure.getLocation(), temp)) {
+         // Check for collisions
+         for (int i = 0; i < crates.size(); i++) {
+            if (isCollision(crates.get(i).getLocation(), temp)) {
                System.out.println("Can't place block here");
                return;
             }
+         }
 
-            waldo.setState(BUILDING);
-            if (waldo.getDirection() == Entity.Direction.LEFT) {
-               crates.add(new Crate(waldo.getLocation().x - 128));
-            } else {
-               crates.add(new Crate(waldo.getLocation().x + 128));
-            }
+         if (isCollision(treasure.getLocation(), temp)) {
+            System.out.println("Can't place block here");
+            return;
+         }
+
+         waldo.setState(BUILDING);
+         if (waldo.getDirection() == Entity.Direction.LEFT) {
+            crates.add(new Crate(waldo.getLocation().x - 128));
+         } else {
+            crates.add(new Crate(waldo.getLocation().x + 128));
          }
       }
    }
@@ -465,31 +457,32 @@ public class MainGame implements Screen {
          requiredDirection = Entity.Direction.RIGHT;
       }
 
-      if ((waldo.getDirection() == requiredDirection) && Math.abs(distance) < 150) {
-         return true;
-      } else {
-         return false;
-      }
+      return ((waldo.getDirection() == requiredDirection) && Math.abs(distance) < 150);
    }
 
     @Override
     public void resize(int width, int height) {
+      //SonarQube Says this needs a comment
     }
 
     @Override
     public void show() {
+      //SonarQube Says this needs a comment
     }
 
     @Override
     public void hide() {
+      //SonarQube Says this needs a comment
     }
 
     @Override
     public void pause() {
+      //SonarQube Says this needs a comment
     }
 
     @Override
     public void resume() {
+      //SonarQube Says this needs a comment
     }
 
    @Override
