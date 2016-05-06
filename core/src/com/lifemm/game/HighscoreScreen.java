@@ -12,7 +12,7 @@ import com.badlogic.gdx.Screen;
 import java.io.IOException;
 import java.util.List;
 
-public class HighscoreScreen implements Screen {
+public class HighscoreScreen extends ScreenOverride {
 
    final LifeMM game;
 
@@ -57,35 +57,4 @@ public class HighscoreScreen implements Screen {
         game.batch.end();
       }
    }
-
-
-    @Override
-    public void resize(int width, int height) {
-        // Method must be overridden to implement Screen
-    }
-
-    @Override
-    public void show() {
-        // Method must be overridden to implement Screen
-    }
-
-    @Override
-    public void hide() {
-        // Method must be overridden to implement Screen
-    }
-
-    @Override
-    public void pause() {
-        // Method must be overridden to implement Screen
-    }
-
-    @Override
-    public void resume() {
-        // Method must be overridden to implement Screen
-    }
-
-    @Override
-    public void dispose() {
-        // Method must be overridden to implement Screen
-    }
 }

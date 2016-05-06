@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.audio.Sound;
 
-public class MainMenu implements Screen {
+public class MainMenu extends ScreenOverride {
 
    final LifeMM game;
 
@@ -110,31 +110,6 @@ public class MainMenu implements Screen {
       }
 
    }
-
-    @Override
-    public void resize(int width, int height) {
-      //SonarQube Says this needs a comment
-    }
-
-    @Override
-    public void show() {
-      //SonarQube Says this needs a comment
-    }
-
-    @Override
-    public void hide() {
-      //SonarQube Says this needs a comment
-    }
-
-    @Override
-    public void pause() {
-      //SonarQube Says this needs a comment
-    }
-
-    @Override
-    public void resume() {
-      //SonarQube Says this needs a comment
-    }
 
     @Override
     public void dispose() {

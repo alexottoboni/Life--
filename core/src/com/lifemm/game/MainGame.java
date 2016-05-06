@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainGame implements Screen {
+public class MainGame extends ScreenOverride {
    
    final LifeMM game;
 
@@ -459,31 +459,6 @@ public class MainGame implements Screen {
 
       return ((waldo.getDirection() == requiredDirection) && Math.abs(distance) < 150);
    }
-
-    @Override
-    public void resize(int width, int height) {
-      //SonarQube Says this needs a comment
-    }
-
-    @Override
-    public void show() {
-      //SonarQube Says this needs a comment
-    }
-
-    @Override
-    public void hide() {
-      //SonarQube Says this needs a comment
-    }
-
-    @Override
-    public void pause() {
-      //SonarQube Says this needs a comment
-    }
-
-    @Override
-    public void resume() {
-      //SonarQube Says this needs a comment
-    }
 
    @Override
    public void dispose() {
