@@ -1,19 +1,13 @@
 package com.lifemm.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.FPSLogger;
-import com.badlogic.gdx.audio.Sound;
 
 import java.io.IOException;
 import java.util.List;
@@ -63,25 +57,31 @@ public class HighscoreScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        // Method must be overridden to implement Screen
     }
 
     @Override
     public void show() {
+        // Method must be overridden to implement Screen
     }
 
     @Override
     public void hide() {
+        // Method must be overridden to implement Screen
     }
 
     @Override
     public void pause() {
+        // Method must be overridden to implement Screen
     }
 
     @Override
     public void resume() {
+        // Method must be overridden to implement Screen
     }
 
     @Override
     public void dispose() {
+        // Method must be overridden to implement Screen
     }
 }
