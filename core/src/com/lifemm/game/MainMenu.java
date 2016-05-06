@@ -15,17 +15,17 @@ public class MainMenu implements Screen {
    final LifeMM game;
 
    BitmapFont titleFont;
-   public static Texture backgroundTexture;
-   public static Texture play;
-   public static Texture selectedPlay;
-   public static Texture tutorial;
-   public static Texture selectedTutorial;
-   public static Texture highscores;
-   public static Texture selectedHighscores;
-   public int buttonSelection;
+   private static Texture backgroundTexture;
+   private static Texture play;
+   private static Texture selectedPlay;
+   private static Texture tutorial;
+   private static Texture selectedTutorial;
+   private static Texture highscores;
+   private static Texture selectedHighscores;
+   private int buttonSelection;
 
    // Sounds
-   public static Sound bgSound;
+   private static Sound bgSound;
 
    int delaySelection;
 
@@ -64,8 +64,6 @@ public class MainMenu implements Screen {
          } else if (buttonSelection == 2) {
             game.setScreen(new Tutorial(game));
             dispose();
-         } else {
-
          }
       }
 
@@ -115,22 +113,27 @@ public class MainMenu implements Screen {
 
     @Override
     public void resize(int width, int height) {
+      //SonarQube Says this needs a comment
     }
 
     @Override
     public void show() {
+      //SonarQube Says this needs a comment
     }
 
     @Override
     public void hide() {
+      //SonarQube Says this needs a comment
     }
 
     @Override
     public void pause() {
+      //SonarQube Says this needs a comment
     }
 
     @Override
     public void resume() {
+      //SonarQube Says this needs a comment
     }
 
     @Override
