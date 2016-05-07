@@ -25,12 +25,8 @@ public class MainGame extends ScreenOverride {
    Waldo waldo;
    Treasure treasure;
 
-   // Levels and Number of Enemies killed
-   int level;
-   int enemiesKilled;
-   boolean newLevel;
-   int pauseFrames;
-   int enemiesInLevel;
+   // Levels
+   Level level;
 
    // Fonts
    BitmapFont font;
@@ -94,11 +90,7 @@ public class MainGame extends ScreenOverride {
       clouds.add(new Cloud(1, 300, -100));
       clouds.add(new Cloud(2, 0, 0));
 
-      level = 1;
-      enemiesKilled = 0;
-      newLevel = false;
-      pauseFrames = 200;
-      enemiesInLevel = 2;
+      level = new Level();
     }
 
     @Override
@@ -174,22 +166,17 @@ public class MainGame extends ScreenOverride {
       updateCloudsPosition();
 
 
-      // if the game is entering a new level,
-      // then increment the number of pause frames until
-      // the pause has been met.
-      if (newLevel) {
-         pauseFrames++;
-         if (pauseFrames > 200) {
-            newLevel = false;
-         }
-      }
+      // if the game is in a level pause,
+      // then update the level state;
+      if (level.isInLevelPause()) {
+          level.updateLevelIfInPause();
+       }
 
-      // if the game is not entering a new level, then updated
-      // the state of the current enemies
-      if (!newLevel) { 
+      // if the game is not in a level pause, update
+      // the states of the current enemies
+      if (!level.isInLevelPause()) { 
          updateEnemiesState();
       }
-
 
       game.batch.begin();
       renderBG();
@@ -199,12 +186,12 @@ public class MainGame extends ScreenOverride {
       font.draw(game.batch, "Health " + (int)waldo.getHealth(), 1100, 800);
       font.draw(game.batch, "Lives " + waldo.getLives(), 1100, 750);
       font.draw(game.batch, "Time " + (int)time.getTime(), 1100, 700);
-      font.draw(game.batch, "Level " + level , 600, 800);
-      // if the game is entering a new level, then display the level number
+      font.draw(game.batch, "Level " + level.getLevelNumber() , 600, 800);
+      // if the game is in a level pause, then display the level number
       // at the center of the screen
-      if (newLevel)
+      if (level.isInLevelPause())
       {
-         font.draw(game.batch, "Level " + level, 1440/2 - 100, 810/2);
+         font.draw(game.batch, "Level " + level.getLevelNumber(), 1440/2 - 100, 810/2);
       }
       font.draw(game.batch, "Score " + waldo.getScore(), 1100, 100);      
 
@@ -214,7 +201,8 @@ public class MainGame extends ScreenOverride {
       deleteDeadCrates();
       renderCrates();
 
-      if (!newLevel)
+      // if the game is not in  a level pause, then render the enemies
+      if (!level.isInLevelPause())
       {
          renderEnemies();
       }
@@ -374,11 +362,12 @@ public class MainGame extends ScreenOverride {
    public void deleteDeadEnemies() {
       for (int i = 0; i < enemies.size(); i++) {
          if (enemies.get(i).getHealth() <= 0) {
-            enemiesKilled++;
+            //increment the number of enemies if you encounter an enemy that is dead
+            level.incrementEnemiesKilled();
             enemies.remove(enemies.get(i));
             waldo.addScore(1000);
             // create a new ememy to appear on the left side of the game field
-            if (enemiesKilled%2 == 1) {
+            if (level.getTotalEnemiesKilled()%2 == 1) {
                Spider leftSpider = new Spider(Entity.Direction.LEFT);
                enemies.add(leftSpider);
             }
@@ -387,14 +376,10 @@ public class MainGame extends ScreenOverride {
                Spider rightSpider = new Spider(Entity.Direction.RIGHT);
                enemies.add(rightSpider);
             }
-           // if 5 enemies have been killed, then go to the next level
-           // and setup pauseFrames
-            if (enemiesKilled == enemiesInLevel) {
-                enemiesKilled = 0;
-                enemiesInLevel += 5;
-                newLevel = true;
-                pauseFrames = 0;
-                level++;
+           // if all the enemies have been killed in the level,
+           // then go to the next level
+            if (level.AllEnemiesKilledInLevel()) {
+                level.goToNextLevel();
            }
          }
       }
