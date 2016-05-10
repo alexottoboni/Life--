@@ -19,7 +19,7 @@ public class MainGame extends ScreenOverride {
    
    final LifeMM game;
 
-   public enum MainGameState {PLAY, PAUSED};
+   public enum MainGameState {PLAY, PAUSED, SELECT};
 
    // Main Character and Treasure
    Waldo waldo;
@@ -40,6 +40,10 @@ public class MainGame extends ScreenOverride {
    private static Texture backgroundTexture;
    private static Texture floorTexture;
 
+   // Textures for block menu
+   private ArrayList<Texture> buttons;
+   private ArrayList<Texture> selectedButtons;
+
    // Sounds
    private static Sound bgSound;
 
@@ -56,10 +60,15 @@ public class MainGame extends ScreenOverride {
    private MainGameState state = MainGameState.PLAY;
    private int framesInState;
    private Stopwatch time;
+   private int buttonSelection;
+   private int maxButtons;
+   private int delay;
     
    // Function that gets called once to prepare everything needed for render
    public MainGame (final LifeMM game) {
       this.game = game;
+      buttons = new ArrayList<>();
+      selectedButtons = new ArrayList<>();
 
       // One of a kind entities
       waldo = new Waldo();
@@ -69,6 +78,13 @@ public class MainGame extends ScreenOverride {
       // Load Textures
       backgroundTexture = new Texture("bg4.png");
       floorTexture = new Texture("floor.png");
+      // Load Button Textures for Block Selection Menu (Temporary Graphics)
+      buttons.add(new Texture("crate.png"));
+      buttons.add(new Texture("crate.png"));
+      buttons.add(new Texture("playbutton.png")); 
+      selectedButtons.add(new Texture("crate.png"));
+      selectedButtons.add(new Texture("crate.png"));
+      selectedButtons.add(new Texture("playbuttonselected.png"));
 
       // Load Sounds
       bgSound = Gdx.audio.newSound(Gdx.files.internal("data/bgSound.wav"));
@@ -89,7 +105,10 @@ public class MainGame extends ScreenOverride {
       enemies.add(new Spider());
       clouds.add(new Cloud(1, 300, -100));
       clouds.add(new Cloud(2, 0, 0));
-
+      
+      buttonSelection = 0;
+      maxButtons = buttons.size();
+      delay = 15;
       level = new Level();
     }
 
@@ -97,6 +116,8 @@ public class MainGame extends ScreenOverride {
     public void render (float delta) {
       if (state == MainGameState.PLAY) {
          doPlay(); 
+      } else if (state == MainGameState.SELECT) {
+	 doSelection();
       } else {
          doPaused();
       }
@@ -148,6 +169,11 @@ public class MainGame extends ScreenOverride {
       waldo.update();
 
       framesInState++;
+
+      if (framesInState > 20 && Gdx.input.isKeyPressed(Keys.B)) {
+         state = MainGameState.SELECT;
+         framesInState = 0;
+      }
 
       if (framesInState > 20 && Gdx.input.isKeyPressed(Keys.P)) {
          state = MainGameState.PAUSED;
@@ -306,6 +332,44 @@ public class MainGame extends ScreenOverride {
             s.setState(MOVING);
          }
       }
+   }
+
+   public void doSelection() {
+      game.batch.begin();
+      font.draw(game.batch, "Select a Block", 1440/2 - 200, 600);
+      for (int ndx = 0; ndx < maxButtons; ndx++) {
+	  game.batch.draw(buttons.get(ndx), 1440/2 - 100, 400 - 128 * ndx);
+      }
+      game.batch.draw(selectedButtons.get(buttonSelection), 1440/2 - 100, 400 - 128 * buttonSelection);
+      if (Gdx.input.isKeyPressed(Keys.UP) && delay < 0) {
+         if (buttonSelection > 0) {
+            buttonSelection--;
+         }
+         delay = 15;
+      }
+
+      if (Gdx.input.isKeyPressed(Keys.DOWN) && delay < 0) {
+         if (buttonSelection < maxButtons) {
+            buttonSelection++;
+         }
+         delay = 15;
+	 }
+
+      if (Gdx.input.isKeyPressed(Keys.ENTER)) {
+	 // need something to tell different blocks apart, a collection of them
+         // whose indexes correspond to the same number as the button's
+	 state = MainGameState.PLAY;
+         framesInState = 0;
+      }
+      if (framesInState > 20 && Gdx.input.isKeyPressed(Keys.B)) {
+         state = MainGameState.PLAY;
+         framesInState = 0;
+      }
+      game.batch.end();
+      framesInState++;
+      delay--;
+      
+      time.restart();  
    }
 
    public void doPaused() {
