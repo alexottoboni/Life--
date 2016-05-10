@@ -32,6 +32,7 @@ public class HighscoreScreen extends ScreenOverride {
       try {
         highscores = ScoreAPI.getInstance().getScores();
       } catch (IOException e) {
+        Gdx.app.log("HighscoreScreen", "Failed to get highscores.");
         highscores = null;
       }
    }
