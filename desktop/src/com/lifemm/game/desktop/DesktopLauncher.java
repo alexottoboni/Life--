@@ -2,7 +2,7 @@ package com.lifemm.game.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.lifemm.game.Logic.LifeMM;
+import com.lifemm.game.LifeMM;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
