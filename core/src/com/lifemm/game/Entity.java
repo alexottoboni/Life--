@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.Texture;
 
 public abstract class Entity {
-    private static final int FLOOR = 235;
+    public static final int FLOOR = 235;
     public enum Direction {UP, DOWN, LEFT, RIGHT};
     protected Rectangle location;
     private float xVelocity;

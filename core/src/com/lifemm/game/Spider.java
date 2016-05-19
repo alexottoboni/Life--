@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Spider extends Enemy {
 
-   private static final int FLOOR = 235;
    private static final int MOVING = 2;
 
    private Texture texture;
