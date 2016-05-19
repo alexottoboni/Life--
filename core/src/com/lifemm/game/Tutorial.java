@@ -27,8 +27,8 @@ public class Tutorial extends ScreenOverride {
    BitmapFont font;
 
    // List of entities that there can be multiple of
-   public ArrayList<Enemy> enemies;
-   public ArrayList<Entity> crates;
+   public ArrayList<Spider> enemies;
+   public ArrayList<Crate> crates;
 
    // Textures for the background and floor
    public static Texture backgroundTexture;
@@ -51,6 +51,7 @@ public class Tutorial extends ScreenOverride {
    public boolean hasMovedRight;
    public boolean hasPlacedBlock;
    public boolean hasKilledEnemy;
+   private Renderer renderer;
 
    public Tutorial (final LifeMM game) {
       this.game = game;
@@ -84,6 +85,9 @@ public class Tutorial extends ScreenOverride {
       // Load Textures
       backgroundTexture = new Texture("bg4.png");
       floorTexture = new Texture("floor.png");
+   
+      // Intialize Renderer
+      renderer = new Renderer();
    }   
 
    @Override
@@ -112,7 +116,7 @@ public class Tutorial extends ScreenOverride {
          font.draw(game.batch, "Welcome to Life--", 1440/2 - 200, 810/2);
       } else if ((int)time.getTime() >= 3 && (int)time.getTime() < 6) {
          font.draw(game.batch, "You control the hero Waldo", 1440/2 - 300, 600);
-         game.batch.draw(waldo.getCurrentTexture(), waldo.getLocation().x, waldo.getLocation().y);
+         game.batch.draw(renderer.getCurrentTexture(waldo), waldo.getLocation().x, waldo.getLocation().y);
       } else if ((int)time.getTime() >= 6 && (int)time.getTime() < 12) {
          font.draw(game.batch, "Protect the treasure!", 1440/2 - 200, 600);
          game.batch.draw(treasure.getCurrentTexture(), treasure.getLocation().x, treasure.getLocation().y);
@@ -137,7 +141,7 @@ public class Tutorial extends ScreenOverride {
       game.batch.begin();
       renderBG();
       game.batch.draw(treasure.getCurrentTexture(), treasure.getLocation().x, treasure.getLocation().y);
-      game.batch.draw(waldo.getCurrentTexture(), waldo.getLocation().x, waldo.getLocation().y);
+      game.batch.draw(renderer.getCurrentTexture(waldo), waldo.getLocation().x, waldo.getLocation().y);
       font.draw(game.batch, "Press the arrow keys to move", 1440/2 - 400, 600);
       game.batch.end();
 
@@ -161,7 +165,7 @@ public class Tutorial extends ScreenOverride {
       game.batch.begin();
       renderBG();
       game.batch.draw(treasure.getCurrentTexture(), treasure.getLocation().x, treasure.getLocation().y);
-      game.batch.draw(waldo.getCurrentTexture(), waldo.getLocation().x, waldo.getLocation().y);
+      game.batch.draw(renderer.getCurrentTexture(waldo), waldo.getLocation().x, waldo.getLocation().y);
       font.draw(game.batch, "Press 'A' to place a block", 1440/2 - 400, 600);
       renderCrates();
       game.batch.end();
@@ -187,7 +191,7 @@ public class Tutorial extends ScreenOverride {
       renderEnemies();
       deleteDeadEnemies();
       game.batch.draw(treasure.getCurrentTexture(), treasure.getLocation().x, treasure.getLocation().y);
-      game.batch.draw(waldo.getCurrentTexture(), waldo.getLocation().x, waldo.getLocation().y);
+      game.batch.draw(renderer.getCurrentTexture(waldo), waldo.getLocation().x, waldo.getLocation().y);
       font.draw(game.batch, "Press 'SPACE' to attack", 1440/2 - 400, 600);
       renderCrates();
       game.batch.end();
@@ -211,7 +215,7 @@ public class Tutorial extends ScreenOverride {
       game.batch.begin();
       renderBG();
       game.batch.draw(treasure.getCurrentTexture(), treasure.getLocation().x, treasure.getLocation().y);
-      game.batch.draw(waldo.getCurrentTexture(), waldo.getLocation().x, waldo.getLocation().y);
+      game.batch.draw(renderer.getCurrentTexture(waldo), waldo.getLocation().x, waldo.getLocation().y);
       font.draw(game.batch, "Press 'ESC' to leave tutorial", 1440/2 - 400, 600);
       game.batch.end();
       if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
@@ -333,7 +337,7 @@ public class Tutorial extends ScreenOverride {
    }
 
    public void renderEnemies() {
-      for (Entity s : enemies) {
+      for (Spider s : enemies) {
          if (s.getHealth() > 0) {
             game.batch.draw(s.getCurrentTexture(), s.getLocation().x, s.getLocation().y);
          }

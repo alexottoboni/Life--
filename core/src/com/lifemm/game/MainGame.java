@@ -32,9 +32,9 @@ public class MainGame extends ScreenOverride {
    BitmapFont font;
   
    // List of entities that currently exist
-   private List<Enemy> enemies;
-   private List<Entity> crates;
-   private List<Entity> clouds;
+   private List<Spider> enemies;
+   private List<Crate> crates;
+   private List<Cloud> clouds;
 
    // Textures for the background and floor
    private static Texture backgroundTexture;
@@ -63,6 +63,7 @@ public class MainGame extends ScreenOverride {
    private int buttonSelection;
    private int maxButtons;
    private int delay;
+   private Renderer renderer; 
     
    // Function that gets called once to prepare everything needed for render
    public MainGame (final LifeMM game) {
@@ -74,6 +75,7 @@ public class MainGame extends ScreenOverride {
       waldo = new Waldo();
       treasure = new Treasure();
       time = new Stopwatch();
+      renderer = new Renderer();
 
       // Load Textures
       backgroundTexture = new Texture("bg4.png");
@@ -207,7 +209,7 @@ public class MainGame extends ScreenOverride {
       game.batch.begin();
       renderBG();
       game.batch.draw(treasure.getCurrentTexture(), treasure.getLocation().x, treasure.getLocation().y);
-      game.batch.draw(waldo.getCurrentTexture(), waldo.getLocation().x, waldo.getLocation().y);
+      game.batch.draw(renderer.getCurrentTexture(waldo), waldo.getLocation().x, waldo.getLocation().y);
 
       font.draw(game.batch, "Health " + (int)waldo.getHealth(), 1100, 800);
       font.draw(game.batch, "Lives " + waldo.getLives(), 1100, 750);
@@ -475,7 +477,7 @@ public class MainGame extends ScreenOverride {
    }
 
    public void renderEnemies() {
-      for (Entity s : enemies) {
+      for (Spider s : enemies) {
          if (s.getHealth() > 0) {
             game.batch.draw(s.getCurrentTexture(), s.getLocation().x, s.getLocation().y);
          }

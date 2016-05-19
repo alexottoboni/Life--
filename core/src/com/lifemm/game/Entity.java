@@ -119,6 +119,4 @@ public abstract class Entity {
     public void setDirection(Direction dir) {
         this.direction = dir;
     }
-
-    public abstract Texture getCurrentTexture();
 }

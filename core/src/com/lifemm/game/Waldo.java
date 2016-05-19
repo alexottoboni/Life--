@@ -1,7 +1,5 @@
 package com.lifemm.game;
 
-import com.badlogic.gdx.graphics.Texture;
-
 public class Waldo extends Entity {
 
    private static final int FLOOR = 235;
@@ -13,10 +11,6 @@ public class Waldo extends Entity {
    private int state;
    private int score;
    private int lives;
-   private Texture leftTexture;
-   private Texture rightTexture;
-   private Texture rightAttackTexture;
-   private Texture leftAttackTexture;
   
    Waldo() {
       location.x = 1440/2 - 128/2;
@@ -29,28 +23,7 @@ public class Waldo extends Entity {
 
       this.state = MOVING;
 
-      this.leftTexture = new Texture("playersmall.png");
-      this.rightTexture = new Texture("playersmallr.png"); 
-      this.rightAttackTexture = new Texture("playerswing_right.png");
-      this.leftAttackTexture = new Texture("playerswing_left.png");
-      
       this.lives = 3;
-   }
-
-   public Texture getCurrentTexture() {
-      if (this.state == ATTACKING) {
-         if (this.direction == Entity.Direction.LEFT) {
-            return this.leftAttackTexture;
-         } else {
-            return this.rightAttackTexture;
-         }
-      } else {
-         if (this.direction == Entity.Direction.LEFT) {
-            return this.leftTexture;
-         } else {
-            return this.rightTexture;
-         }
-      }
    }
 
    public void updateStateTime() {
