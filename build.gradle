@@ -10,12 +10,6 @@ buildscript {
 allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
-    apply plugin: "jacoco"
-
-    jacoco {
-        toolVersion = "0.7.6.201602180812"
-        reportsDir = file("$buildDir/customJacocoReportDir")
-    }
 
     version = '1.0'
     ext {
@@ -31,14 +25,6 @@ allprojects {
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
-    }
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled false
-        csv.enabled false
-        html.destination "${buildDir}/jacocoHtml"
     }
 }
 
