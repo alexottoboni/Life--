@@ -22,7 +22,7 @@ public class Waldo extends Entity {
       this.direction = Entity.Direction.RIGHT;
 
       this.state = MOVING;
-
+      this.timeInState = 0;
       this.lives = 3;
    }
 
@@ -38,6 +38,10 @@ public class Waldo extends Entity {
       } else if (this.state == ATTACKING && this.timeInState > 40) {
          this.setState(MOVING);
       }
+   }
+
+   public int getTimeInState() {
+      return this.timeInState;
    }
 
    public int getState() {
