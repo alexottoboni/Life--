@@ -22,7 +22,7 @@ public class MainGame extends ScreenOverride {
    public enum MainGameState {PLAY, PAUSED, SELECT};
 
    // Main Character and Treasure
-   Waldo waldo;
+   public Waldo waldo;
    Treasure treasure;
 
    // Levels
@@ -75,7 +75,7 @@ public class MainGame extends ScreenOverride {
       waldo = new Waldo();
       treasure = new Treasure();
       time = new Stopwatch();
-      renderer = new Renderer();
+      renderer = Renderer.getInstance();
 
       // Load Textures
       backgroundTexture = new Texture("bg4.png");
@@ -208,8 +208,8 @@ public class MainGame extends ScreenOverride {
 
       game.batch.begin();
       renderBG();
-      game.batch.draw(treasure.getCurrentTexture(), treasure.getLocation().x, treasure.getLocation().y);
-      game.batch.draw(renderer.getCurrentTexture(waldo), waldo.getLocation().x, waldo.getLocation().y);
+      game.batch.draw(Renderer.getInstance().getTreasureTexture(this.treasure), treasure.getLocation().x, treasure.getLocation().y);
+      game.batch.draw(Renderer.getInstance().getCurrentTexture(waldo), waldo.getLocation().x, waldo.getLocation().y);
 
       font.draw(game.batch, "Health " + (int)waldo.getHealth(), 1100, 800);
       font.draw(game.batch, "Lives " + waldo.getLives(), 1100, 750);

@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 
 /**
  * Tests the Score object.
- * @author Wyatt Smith
+ * @author Wyatt Smith (wysmith)
  */
 
 public class TestScore {

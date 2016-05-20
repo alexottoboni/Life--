@@ -64,6 +64,14 @@ public class Waldo extends Entity {
    public int getLives() {
       return lives;
    }
+
+   public void setScore(int score) {
+      this.score = score;
+   }
+
+   public void setLives(int lives) {
+      this.lives = lives;
+   }
    
    public void decrementLives() {
       this.lives = lives - 1;

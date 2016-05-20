@@ -39,6 +39,15 @@ public class ScoreAPI {
     }
 
     /**
+    Saves a high score. Blocking, so do in separate thread.
+    @param name The name of the player to save.
+    @param waldo The waldo instance for the score to upload.
+    */
+    public void saveScore(String name, Waldo waldo) throws IOException {
+        saveScore(name, waldo.getScore());
+    }
+
+    /**
     Returns a list of high scores.
     @return A List of Scores.
     */

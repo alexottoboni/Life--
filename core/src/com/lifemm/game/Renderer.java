@@ -14,13 +14,24 @@ public class Renderer {
    private Texture rightTexture;
    private Texture rightAttackTexture;
    private Texture leftAttackTexture;
+   private Texture treasure;
+
+   private static Renderer instance;
+
+   public static Renderer getInstance() {
+      if (instance == null) {
+         instance = new Renderer();
+      }
+      return instance;
+   }
 
 
-   Renderer() {
+   private Renderer() {
       this.leftTexture = new Texture("playersmall.png");
       this.rightTexture = new Texture("playersmallr.png"); 
       this.rightAttackTexture = new Texture("playerswing_right.png");
       this.leftAttackTexture = new Texture("playerswing_left.png");
+      this.treasure = new Texture("heart.png");
    }
 
    public Texture getCurrentTexture(Waldo waldo) {
@@ -39,5 +50,9 @@ public class Renderer {
             return this.rightTexture;
          }
       }
+   }
+
+   public Texture getTreasureTexture(Treasure treasure) {
+      return this.treasure;
    }
 }
