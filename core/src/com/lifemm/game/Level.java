@@ -2,60 +2,60 @@ package com.lifemm.game;
 
 public class Level
 {
-    private int CurrentLevel;
-    private int EnemiesPerLevel;
-    private boolean LevelPause;
-    private int EnemiesKilled;
-    private int PauseFrames;
-    private int TotalEnemiesKilled;
+    private int currentLevel;
+    private int enemiesPerLevel;
+    private boolean levelPause;
+    private int enemiesKilled;
+    private int pauseFrames;
+    private int totalEnemiesKilled;
 
     public Level()
     {
-        CurrentLevel = 1;
-        LevelPause = false;
-        EnemiesPerLevel = 2;
-        EnemiesKilled = 0;
-        TotalEnemiesKilled = 0;
-        PauseFrames = 0;
+        currentLevel = 1;
+        levelPause = false;
+        enemiesPerLevel = 2;
+        enemiesKilled = 0;
+        totalEnemiesKilled = 0;
+        pauseFrames = 0;
     }
-    public boolean isInLevelPause()
+    public boolean isInlevelPause()
     {
-        return LevelPause;
+        return levelPause;
     }
-    public void incrementEnemiesKilled()
+    public void incrementenemiesKilled()
     {
-        EnemiesKilled++;
-        TotalEnemiesKilled++;
+        enemiesKilled++;
+        totalEnemiesKilled++;
     }
     public void updateLevelIfInPause()
     {
-         if (LevelPause && PauseFrames < 200) {
-             PauseFrames++;
+         if (levelPause && pauseFrames < 200) {
+             pauseFrames++;
          }
          else{
-             LevelPause = false;
+             levelPause = false;
          }      
     }
     public void goToNextLevel()
     {
-         CurrentLevel++;
-         EnemiesKilled = 0;
-         EnemiesPerLevel += 5;
-         PauseFrames = 0;
-         LevelPause = true;
+         currentLevel++;
+         enemiesKilled = 0;
+         enemiesPerLevel += 5;
+         pauseFrames = 0;
+         levelPause = true;
     }
-    public boolean AllEnemiesKilledInLevel()
+    public boolean allenemiesKilledInLevel()
     {
-         return EnemiesKilled == EnemiesPerLevel;
+         return enemiesKilled == enemiesPerLevel;
     }
     
     public int getLevelNumber()
     {
-         return CurrentLevel;
+         return currentLevel;
     }
-    public int getTotalEnemiesKilled()
+    public int gettotalEnemiesKilled()
    {
-        return TotalEnemiesKilled;
+        return totalEnemiesKilled;
    }
 }
 

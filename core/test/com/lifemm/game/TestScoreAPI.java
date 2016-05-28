@@ -5,15 +5,14 @@ import org.junit.Test;
 import com.lifemm.game.Score;
 import java.io.IOException;
 
-import static org.junit.Assert.*;
+import junit.framework.TestCase;
 
 /**
  * Tests the ScoreAPI object. Tests integration between server and our code.
  * @author Wyatt Smith (wysmith)
  */
 
-public class TestScoreAPI {
-    @Test
+public class TestScoreAPI extends TestCase {
     public void testSaveScoreGeneral() {
         ScoreAPI api = ScoreAPI.getInstance();
         try {
@@ -26,7 +25,6 @@ public class TestScoreAPI {
         }
     }
 
-    @Test
     public void testGetScoresGeneral() {
         ScoreAPI api = ScoreAPI.getInstance();
         try {
