@@ -208,7 +208,7 @@ public class MainGame extends ScreenOverride {
 
       game.batch.begin();
       renderBG();
-      game.batch.draw(Renderer.getInstance().getTreasureTexture(this.treasure), treasure.getLocation().x, treasure.getLocation().y);
+      game.batch.draw(Renderer.getInstance().getTreasureTexture(), treasure.getLocation().x, treasure.getLocation().y);
       game.batch.draw(Renderer.getInstance().getCurrentTexture(waldo), waldo.getLocation().x, waldo.getLocation().y);
 
       font.draw(game.batch, "Health " + (int)waldo.getHealth(), 1100, 800);

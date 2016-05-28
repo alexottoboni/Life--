@@ -49,7 +49,7 @@ public class Renderer {
       }
    }
 
-   public Texture getTreasureTexture(Treasure treasure) {
+   public Texture getTreasureTexture() {
       return this.treasure;
    }
 }

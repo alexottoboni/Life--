@@ -119,7 +119,7 @@ public class Tutorial extends ScreenOverride {
          game.batch.draw(renderer.getCurrentTexture(waldo), waldo.getLocation().x, waldo.getLocation().y);
       } else if ((int)time.getTime() >= 6 && (int)time.getTime() < 12) {
          font.draw(game.batch, "Protect the treasure!", 1440/2 - 200, 600);
-         game.batch.draw(Renderer.getInstance().getTreasureTexture(this.treasure), treasure.getLocation().x, treasure.getLocation().y);
+         game.batch.draw(Renderer.getInstance().getTreasureTexture(), treasure.getLocation().x, treasure.getLocation().y);
       } else {
          this.setTutorialState(TutorialState.MOVEMENT);
       }
@@ -140,7 +140,7 @@ public class Tutorial extends ScreenOverride {
 
       game.batch.begin();
       renderBG();
-      game.batch.draw(Renderer.getInstance().getTreasureTexture(this.treasure), treasure.getLocation().x, treasure.getLocation().y);
+      game.batch.draw(Renderer.getInstance().getTreasureTexture(), treasure.getLocation().x, treasure.getLocation().y);
       game.batch.draw(renderer.getCurrentTexture(waldo), waldo.getLocation().x, waldo.getLocation().y);
       font.draw(game.batch, "Press the arrow keys to move", 1440/2 - 400, 600);
       game.batch.end();
@@ -164,7 +164,7 @@ public class Tutorial extends ScreenOverride {
 
       game.batch.begin();
       renderBG();
-      game.batch.draw(Renderer.getInstance().getTreasureTexture(this.treasure), treasure.getLocation().x, treasure.getLocation().y);
+      game.batch.draw(Renderer.getInstance().getTreasureTexture(), treasure.getLocation().x, treasure.getLocation().y);
       game.batch.draw(renderer.getCurrentTexture(waldo), waldo.getLocation().x, waldo.getLocation().y);
       font.draw(game.batch, "Press 'A' to place a block", 1440/2 - 400, 600);
       renderCrates();
@@ -190,7 +190,7 @@ public class Tutorial extends ScreenOverride {
       renderBG();
       renderEnemies();
       deleteDeadEnemies();
-      game.batch.draw(Renderer.getInstance().getTreasureTexture(this.treasure), treasure.getLocation().x, treasure.getLocation().y);
+      game.batch.draw(Renderer.getInstance().getTreasureTexture(), treasure.getLocation().x, treasure.getLocation().y);
       game.batch.draw(renderer.getCurrentTexture(waldo), waldo.getLocation().x, waldo.getLocation().y);
       font.draw(game.batch, "Press 'SPACE' to attack", 1440/2 - 400, 600);
       renderCrates();
@@ -214,7 +214,7 @@ public class Tutorial extends ScreenOverride {
 
       game.batch.begin();
       renderBG();
-      game.batch.draw(Renderer.getInstance().getTreasureTexture(this.treasure), treasure.getLocation().x, treasure.getLocation().y);
+      game.batch.draw(Renderer.getInstance().getTreasureTexture(), treasure.getLocation().x, treasure.getLocation().y);
       game.batch.draw(renderer.getCurrentTexture(waldo), waldo.getLocation().x, waldo.getLocation().y);
       font.draw(game.batch, "Press 'ESC' to leave tutorial", 1440/2 - 400, 600);
       game.batch.end();
