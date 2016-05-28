@@ -24,7 +24,7 @@ public class TestScoreAPI extends TestCase {
             api.saveScore("Wyatt Smith", waldo.getScore());
             assertTrue(true);
         } catch (IOException exception) {
-            LOGGER.info(ex);
+            LOGGER.log(Level.SEVERE, "Exception found", exception);
             assertTrue(false);
         }
     }
@@ -35,6 +35,7 @@ public class TestScoreAPI extends TestCase {
             api.getScores();
             assertTrue(true);
         } catch (IOException exception) {
+            LOGGER.log(Level.SEVERE, "Exception found", exception);
             assertTrue(false);
         }
     }
