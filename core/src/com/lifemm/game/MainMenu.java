@@ -65,6 +65,8 @@ public class MainMenu extends ScreenOverride {
             case 2:
                game.setScreen(new Tutorial(game));
                break;
+            default:
+               throw new Error("Unknown button: " + buttonSelection);
          }
          dispose();
       }
