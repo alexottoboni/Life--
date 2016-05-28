@@ -1,6 +1,5 @@
 package com.lifemm.game;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import com.lifemm.game.Score;
 
