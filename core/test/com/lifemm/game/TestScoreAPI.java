@@ -1,9 +1,9 @@
 package com.lifemm.game;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import com.lifemm.game.Score;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import junit.framework.TestCase;
 
@@ -13,6 +13,9 @@ import junit.framework.TestCase;
  */
 
 public class TestScoreAPI extends TestCase {
+
+    private final static Logger LOGGER = Logger.getLogger(TestScoreAPI.class.getName()); 
+
     public void testSaveScoreGeneral() {
         ScoreAPI api = ScoreAPI.getInstance();
         try {
@@ -21,6 +24,7 @@ public class TestScoreAPI extends TestCase {
             api.saveScore("Wyatt Smith", waldo.getScore());
             assertTrue(true);
         } catch (IOException exception) {
+            LOGGER.info(ex);
             assertTrue(false);
         }
     }
