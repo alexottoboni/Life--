@@ -4,6 +4,7 @@ import org.junit.Test;
 import com.lifemm.game.Score;
 import java.io.IOException;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import junit.framework.TestCase;
 

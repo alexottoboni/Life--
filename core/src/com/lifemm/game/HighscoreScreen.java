@@ -10,10 +10,13 @@ import com.badlogic.gdx.graphics.Color;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public class HighscoreScreen extends ScreenOverride {
 
    final LifeMM game;
+   private final static Logger LOGGER = Logger.getLogger(HighscoreScreen.class.getName()); 
 
    List<Score> highscores;
 
@@ -31,8 +34,8 @@ public class HighscoreScreen extends ScreenOverride {
       this.game = game;
       try {
         highscores = ScoreAPI.getInstance().getScores();
-      } catch (IOException e) {
-        Gdx.app.log("HighscoreScreen", "Failed to get highscores.");
+      } catch (IOException exception) {
+        LOGGER.log(Level.SEVERE, "Failed to get highscores: ", exception);
         highscores = null;
       }
    }

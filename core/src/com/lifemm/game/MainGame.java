@@ -14,10 +14,13 @@ import com.badlogic.gdx.audio.Sound;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public class MainGame extends ScreenOverride {
    
    final LifeMM game;
+   private final static Logger LOGGER = Logger.getLogger(MainGame.class.getName()); 
 
    public enum MainGameState {PLAY, PAUSED, SELECT};
 
@@ -26,7 +29,7 @@ public class MainGame extends ScreenOverride {
    Treasure treasure;
 
    // Levels
-   Level level;
+   com.lifemm.game.Level level;
 
    // Fonts
    BitmapFont font;
@@ -111,7 +114,7 @@ public class MainGame extends ScreenOverride {
       buttonSelection = 0;
       maxButtons = buttons.size();
       delay = 15;
-      level = new Level();
+      level = new com.lifemm.game.Level();
     }
 
     @Override
@@ -152,8 +155,8 @@ public class MainGame extends ScreenOverride {
          game.setScreen(new MainMenu(game));
          try {
             ScoreAPI.getInstance().saveScore("Player1", waldo.getScore());
-         } catch(IOException e) {
-            
+         } catch(IOException exception) {
+            LOGGER.log(Level.SEVERE, "Failed to save highscore: ", exception);
          }
          dispose();
       }
@@ -162,8 +165,8 @@ public class MainGame extends ScreenOverride {
          game.setScreen(new MainMenu(game));
          try {
             ScoreAPI.getInstance().saveScore("Player1", waldo.getScore());
-         } catch(IOException e) {
-
+         } catch(IOException exception) {
+            LOGGER.log(Level.SEVERE, "Failed to save highscore: ", exception);
          }
          dispose();
       }
