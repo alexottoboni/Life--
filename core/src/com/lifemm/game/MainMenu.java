@@ -54,16 +54,19 @@ public class MainMenu extends ScreenOverride {
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
       if (Gdx.input.isKeyPressed(Keys.ENTER)) {
-         if (buttonSelection == 0) {
-            game.setScreen(new MainGame(game));
-            dispose();
-         } else if (buttonSelection == 1) {
-            game.setScreen(new HighscoreScreen(game));
-            dispose();
-         } else if (buttonSelection == 2) {
-            game.setScreen(new Tutorial(game));
-            dispose();
+         switch(buttonSelection) {
+            case 0:
+               game.setScreen(new MainGame(game));
+               dispose();
+               break;
+            case 1:
+               game.setScreen(new HighscoreScreen(game));
+               break;
+            case 2:
+               game.setScreen(new Tutorial(game));
+               break;
          }
+         dispose();
       }
 
       if (Gdx.input.isKeyPressed(Keys.UP) && delaySelection < 0) {
