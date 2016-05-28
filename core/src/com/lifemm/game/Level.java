@@ -18,11 +18,11 @@ public class Level
         totalEnemiesKilled = 0;
         pauseFrames = 0;
     }
-    public boolean isInlevelPause()
+    public boolean isInLevelPause()
     {
         return levelPause;
     }
-    public void incrementenemiesKilled()
+    public void incrementEnemiesKilled()
     {
         enemiesKilled++;
         totalEnemiesKilled++;
@@ -44,7 +44,7 @@ public class Level
          pauseFrames = 0;
          levelPause = true;
     }
-    public boolean allenemiesKilledInLevel()
+    public boolean allEnemiesKilledInLevel()
     {
          return enemiesKilled == enemiesPerLevel;
     }
@@ -53,7 +53,7 @@ public class Level
     {
          return currentLevel;
     }
-    public int gettotalEnemiesKilled()
+    public int getTotalEnemiesKilled()
    {
         return totalEnemiesKilled;
    }

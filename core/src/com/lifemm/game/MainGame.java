@@ -444,7 +444,7 @@ public class MainGame extends ScreenOverride {
             }
            // if all the enemies have been killed in the level,
            // then go to the next level
-            if (level.AllEnemiesKilledInLevel()) {
+            if (level.allEnemiesKilledInLevel()) {
                 level.goToNextLevel();
            }
          }
