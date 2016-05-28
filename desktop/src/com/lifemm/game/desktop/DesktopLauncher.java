@@ -8,7 +8,7 @@ import java.util.logging.Level;
 
 public class DesktopLauncher {
 
-   private final static Logger LOGGER = Logger.getLogger(DesktopLauncher.class.getName()); 
+   private static final Logger LOGGER = Logger.getLogger(DesktopLauncher.class.getName()); 
 
     private DesktopLauncher() {
         // Do nothing. We don't want to create a launcher again.

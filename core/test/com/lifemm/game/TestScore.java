@@ -12,14 +12,16 @@ import junit.framework.TestCase;
  */
 
 public class TestScore extends TestCase {
+
+    public static final String NAME = "Test User";
     public void testGetScoreGeneral() {
-        Score score = new Score("Wyatt Smith", 10000);
+        Score score = new Score(NAME, 10000);
         assertEquals(10000, score.getScore());
     }
 
     public void testGetNameGeneral() {
-        Score score = new Score("Wyatt Smith", 10000);
-        assertEquals("Wyatt Smith", score.getName());
+        Score score = new Score(NAME, 10000);
+        assertEquals("Test User", score.getName());
     }
 
     public void testGetNameNull() {
@@ -28,8 +30,8 @@ public class TestScore extends TestCase {
     }
 
     public void testToStringGeneral() {
-        Score score = new Score("Wyatt Smith", 10000);
-        assertEquals("Wyatt Smith: 10000", score.toString());
+        Score score = new Score(NAME, 10000);
+        assertEquals("Test User: 10000", score.toString());
     }
 
     public void testToStringNull() {

@@ -20,7 +20,7 @@ import java.util.logging.Level;
 public class MainGame extends ScreenOverride {
    
    final LifeMM game;
-   private final static Logger LOGGER = Logger.getLogger(MainGame.class.getName()); 
+   private static final Logger LOGGER = Logger.getLogger(MainGame.class.getName()); 
 
    public enum MainGameState {PLAY, PAUSED, SELECT};
 

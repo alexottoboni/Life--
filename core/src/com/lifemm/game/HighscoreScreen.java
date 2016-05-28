@@ -16,7 +16,7 @@ import java.util.logging.Level;
 public class HighscoreScreen extends ScreenOverride {
 
    final LifeMM game;
-   private final static Logger LOGGER = Logger.getLogger(HighscoreScreen.class.getName()); 
+   private static final Logger LOGGER = Logger.getLogger(HighscoreScreen.class.getName()); 
 
    List<Score> highscores;
 

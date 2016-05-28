@@ -15,7 +15,7 @@ import junit.framework.TestCase;
 
 public class TestScoreAPI extends TestCase {
 
-    private final static Logger LOGGER = Logger.getLogger(TestScoreAPI.class.getName()); 
+    private static final Logger LOGGER = Logger.getLogger(TestScoreAPI.class.getName()); 
 
     public void testSaveScoreGeneral() {
         ScoreAPI api = ScoreAPI.getInstance();
