@@ -31,8 +31,8 @@ public class Tutorial extends ScreenOverride {
    public ArrayList<Crate> crates;
 
    // Textures for the background and floor
-   public static Texture backgroundTexture;
-   public static Texture floorTexture;
+   private static Texture backgroundTexture;
+   private static Texture floorTexture;
 
    // Constants
    private static final int FLOOR = 235;

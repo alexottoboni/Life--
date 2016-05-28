@@ -48,7 +48,7 @@ public class TestLevel {
    public void testAllEnemiesKilledInLevelFalse() {
       Level level = new Level();
       
-      assertFalse(level.AllEnemiesKilledInLevel());
+      assertFalse(level.allEnemiesKilledInLevel());
    }
    
    @Test
@@ -58,7 +58,7 @@ public class TestLevel {
       level.incrementEnemiesKilled();
       level.incrementEnemiesKilled();      
       
-      assertTrue(level.AllEnemiesKilledInLevel());
+      assertTrue(level.allEnemiesKilledInLevel());
    }
    
    @Test
@@ -71,7 +71,7 @@ public class TestLevel {
       level.incrementEnemiesKilled();
       level.incrementEnemiesKilled();   
       
-      assertFalse(level.AllEnemiesKilledInLevel());
+      assertFalse(level.allEnemiesKilledInLevel());
    }
    
    @Test
