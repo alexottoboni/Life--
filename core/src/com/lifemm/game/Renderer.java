@@ -6,8 +6,6 @@ import com.lifemm.game.Entity;
 public class Renderer {
 
    private static final int ATTACKING = 1;
-   private static final int MOVING = 2;
-   private static final int BUILDING = 4;
 
    // Textures for Waldo
    private Texture leftTexture;
@@ -18,20 +16,19 @@ public class Renderer {
 
    private static Renderer instance;
 
-   public static Renderer getInstance() {
-      if (instance == null) {
-         instance = new Renderer();
-      }
-      return instance;
-   }
-
-
    private Renderer() {
       this.leftTexture = new Texture("playersmall.png");
       this.rightTexture = new Texture("playersmallr.png"); 
       this.rightAttackTexture = new Texture("playerswing_right.png");
       this.leftAttackTexture = new Texture("playerswing_left.png");
       this.treasure = new Texture("heart.png");
+   }
+
+   public static Renderer getInstance() {
+      if (instance == null) {
+         instance = new Renderer();
+      }
+      return instance;
    }
 
    public Texture getCurrentTexture(Waldo waldo) {
