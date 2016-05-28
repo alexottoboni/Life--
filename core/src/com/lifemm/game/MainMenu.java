@@ -69,6 +69,18 @@ public class MainMenu extends ScreenOverride {
          dispose();
       }
 
+      moveIndex();
+
+      game.batch.begin();
+      game.batch.draw(backgroundTexture, 0, 0);
+      titleFont.draw(game.batch, "Life--", 1440/2 - 100, 700);
+      titleFont.draw(game.batch, "Press Enter", 1440/2 - 200, 200);
+      drawButtons();
+      game.batch.end();
+      delaySelection--;
+   }
+
+   private void moveIndex() {
       if (Gdx.input.isKeyPressed(Keys.UP) && delaySelection < 0) {
          if (buttonSelection > 0) {
             buttonSelection--;
@@ -82,14 +94,6 @@ public class MainMenu extends ScreenOverride {
          }
          delaySelection = 15;
       }
-
-      game.batch.begin();
-      game.batch.draw(backgroundTexture, 0, 0);
-      titleFont.draw(game.batch, "Life--", 1440/2 - 100, 700);
-      titleFont.draw(game.batch, "Press Enter", 1440/2 - 200, 200);
-      drawButtons();
-      game.batch.end();
-      delaySelection--;
    }
 
    void drawButtons() {
