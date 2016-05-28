@@ -3,8 +3,13 @@ package com.lifemm.game.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.lifemm.game.LifeMM;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public class DesktopLauncher {
+
+   private final static Logger LOGGER = Logger.getLogger(DesktopLauncher.class.getName()); 
+
     private DesktopLauncher() {
         // Do nothing. We don't want to create a launcher again.
     }
@@ -15,6 +20,6 @@ public class DesktopLauncher {
 		config.width = 1440;
 		config.height = 810;
 		LwjglApplication app = new LwjglApplication(new LifeMM(), config);
-        System.out.println(app);
+        LOGGER.log(Level.INFO, app.toString());
 	}
 }
