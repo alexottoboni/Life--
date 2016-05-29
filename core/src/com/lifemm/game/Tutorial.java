@@ -67,8 +67,8 @@ public class Tutorial extends ScreenOverride {
       hasKilledEnemy = false;
 
       // Initialize lists
-      crates = new ArrayList<Crate>();
-      enemies = new ArrayList<Spider>();
+      crates = new ArrayList<>();
+      enemies = new ArrayList<>();
 
       // Generate the font we use
       FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("GROBOLD.ttf"));
@@ -227,17 +227,7 @@ public class Tutorial extends ScreenOverride {
       }
    }
 
-   // Update the state and position of the main character based on user input
-   public void updateWaldoMovement() {
-    if (Gdx.input.isKeyPressed(Keys.UP) && waldo.getLocation().y == FLOOR) {
-         if (waldo.getLocation().y == FLOOR) {
-            waldo.setYVelocity(15);
-            waldo.setYAcceleration(-1);
-         }
-         System.out.println("Has jumped\n");
-         hasJumped = true;
-      }
-
+  public void updateWaldoAttack() {
       if (Gdx.input.isKeyPressed(Keys.SPACE) && waldo.getState() != ATTACKING) {
          waldo.setState(ATTACKING);
          for (Entity s : enemies) {
@@ -246,25 +236,45 @@ public class Tutorial extends ScreenOverride {
             }
          }
       }
+   }
 
+   public void updateWaldoJump() {
+       if (Gdx.input.isKeyPressed(Keys.UP) && waldo.getLocation().y == FLOOR) {
+         waldo.setYVelocity(15);
+         waldo.setYAcceleration(-1);
+         hasJumped = true;
+       }
+   }
+
+   public void updateWaldoLeftRight() {
       if (Gdx.input.isKeyPressed(Keys.LEFT)) {
          waldo.setXVelocity(-4);
          waldo.setDirection(Entity.Direction.LEFT);
-         hasMovedLeft = true;
+         hasMovedRight = true;
       }
       
       if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
          waldo.setXVelocity(4);
          waldo.setDirection(Entity.Direction.RIGHT);
-         hasMovedRight = true;
+         hasMovedLeft = true;
       }
 
       if (!(Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.LEFT))) {
          waldo.setXVelocity(0);
       }
 
+   }
+
+   // Update the state and position of the main character based on user input
+   public void updateWaldoMovement() {
+
+      updateWaldoJump();
+      updateWaldoAttack();
+      updateWaldoLeftRight();
+   
       if (Gdx.input.isKeyPressed(Keys.A) && waldo.getState() != BUILDING) {
          Rectangle temp = new Rectangle(waldo.getLocation());
+         hasPlacedBlock = true;
          if (waldo.getDirection() == Entity.Direction.LEFT) {
             temp.x -= 129;
          } else {
@@ -272,7 +282,6 @@ public class Tutorial extends ScreenOverride {
          }
 
          waldo.setState(BUILDING);
-         hasPlacedBlock = true;
          if (waldo.getDirection() == Entity.Direction.LEFT) {
             crates.add(new Crate(waldo.getLocation().x - 128));
          } else {
