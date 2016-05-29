@@ -55,7 +55,7 @@ public class MainGame extends ScreenOverride {
    private static final int ATTACKING = 1;
    private static final int MOVING = 2;
    private static final int BUILDING = 4;
-   private static final String crateImgLoc = "crate.png";  
+   private static final String CRATE_IMG_LOC = "crate.png";  
  
    // Globals
    private MainGameState state = MainGameState.PLAY;
@@ -75,17 +75,16 @@ public class MainGame extends ScreenOverride {
       waldo = new Waldo();
       treasure = new Treasure();
       time = new Stopwatch();
-      Renderer renderer = Renderer.getInstance();
 
       // Load Textures
       backgroundTexture = new Texture("bg4.png");
       floorTexture = new Texture("floor.png");
       // Load Button Textures for Block Selection Menu (Temporary Graphics)
-      buttons.add(new Texture(crateImgLoc));
-      buttons.add(new Texture(crateImgLoc));
+      buttons.add(new Texture(CRATE_IMG_LOC));
+      buttons.add(new Texture(CRATE_IMG_LOC));
       buttons.add(new Texture("playbutton.png")); 
-      selectedButtons.add(new Texture(crateImgLoc));
-      selectedButtons.add(new Texture(crateImgLoc));
+      selectedButtons.add(new Texture(CRATE_IMG_LOC));
+      selectedButtons.add(new Texture(CRATE_IMG_LOC));
       selectedButtons.add(new Texture("playbuttonselected.png"));
 
       // Load Sounds
@@ -213,13 +212,9 @@ public class MainGame extends ScreenOverride {
       font.draw(game.batch, "Lives " + waldo.getLives(), 1100, 750);
       font.draw(game.batch, "Time " + (int)time.getTime(), 1100, 700);
       font.draw(game.batch, "Level " + level.getLevelNumber() , 600, 800);
-      // if the game is in a level pause, then display the level number
-      // at the center of the screen
-      if (level.isInLevelPause())
-      {
-         font.draw(game.batch, "Level " + level.getLevelNumber(), 1440/2 - 100, 810/2);
-      }
       font.draw(game.batch, "Score " + waldo.getScore(), 1100, 100);      
+
+      checkPause();
 
       time.lap();
       
@@ -234,6 +229,15 @@ public class MainGame extends ScreenOverride {
       }
 
       game.batch.end();
+   }
+
+   public void checkPause() {
+      // if the game is in a level pause, then display the level number
+      // at the center of the screen
+      if (level.isInLevelPause())
+      {
+         font.draw(game.batch, "Level " + level.getLevelNumber(), 1440/2 - 100, 810/2);
+      }
    }
 
    public void updateWaldoAttack() {
@@ -256,12 +260,7 @@ public class MainGame extends ScreenOverride {
        }
    }
 
-   // Update the state and position of the main character based on user input
-   public void updateWaldoMovement() {
-
-      updateWaldoJump();
-      updateWaldoAttack();
-
+   public void updateWaldoLeftRight() {
       if (Gdx.input.isKeyPressed(Keys.LEFT)) {
          waldo.setXVelocity(-4);
          waldo.setDirection(Entity.Direction.LEFT);
@@ -276,6 +275,15 @@ public class MainGame extends ScreenOverride {
          waldo.setXVelocity(0);
       }
 
+   }
+
+   // Update the state and position of the main character based on user input
+   public void updateWaldoMovement() {
+
+      updateWaldoJump();
+      updateWaldoAttack();
+      updateWaldoLeftRight();
+   
       if (Gdx.input.isKeyPressed(Keys.A) && waldo.getState() != BUILDING) {
          Rectangle temp = new Rectangle(waldo.getLocation());
          if (waldo.getDirection() == Entity.Direction.LEFT) {
@@ -345,6 +353,17 @@ public class MainGame extends ScreenOverride {
       }
    }
 
+   public void checkSelectionExit() {
+      if (Gdx.input.isKeyPressed(Keys.ENTER)) {
+	      state = MainGameState.PLAY;
+         framesInState = 0;
+      }
+      else if (framesInState > 20 && Gdx.input.isKeyPressed(Keys.B)) {
+         state = MainGameState.PLAY;
+         framesInState = 0;
+      }
+   }
+
    public void doSelection() {
       game.batch.begin();
       font.draw(game.batch, "Select a Block", 1440/2 - 200, 600);
@@ -364,14 +383,7 @@ public class MainGame extends ScreenOverride {
          }
          delay = 15;
 	   }
-      else if (Gdx.input.isKeyPressed(Keys.ENTER)) {
-	      state = MainGameState.PLAY;
-         framesInState = 0;
-      }
-      else if (framesInState > 20 && Gdx.input.isKeyPressed(Keys.B)) {
-         state = MainGameState.PLAY;
-         framesInState = 0;
-      }
+      checkSelectionExit();
       game.batch.end();
       framesInState++;
       delay--;
