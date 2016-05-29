@@ -9,9 +9,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.Screen;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Tutorial extends ScreenOverride {
    final LifeMM game;
@@ -27,8 +27,8 @@ public class Tutorial extends ScreenOverride {
    BitmapFont font;
 
    // List of entities that there can be multiple of
-   public ArrayList<Spider> enemies;
-   public ArrayList<Crate> crates;
+   private List<Spider> enemies;
+   private List<Crate> crates;
 
    // Textures for the background and floor
    private static Texture backgroundTexture;
@@ -37,20 +37,16 @@ public class Tutorial extends ScreenOverride {
    // Constants
    private static final int FLOOR = 235;
    private static final int ATTACKING = 1;
-   private static final int MOVING = 2;
-   private static final int JUMPING = 3;
    private static final int BUILDING = 4;
-   private static final int LEFT = -1;
-   private static final int RIGHT = 1;
 
    // Globals
-   public TutorialState state = TutorialState.INTRO;
-   public Stopwatch time;
-   public boolean hasJumped;
-   public boolean hasMovedLeft;
-   public boolean hasMovedRight;
-   public boolean hasPlacedBlock;
-   public boolean hasKilledEnemy;
+   private TutorialState state = TutorialState.INTRO;
+   private Stopwatch time;
+   private boolean hasJumped;
+   private boolean hasMovedLeft;
+   private boolean hasMovedRight;
+   private boolean hasPlacedBlock;
+   private boolean hasKilledEnemy;
    private Renderer renderer;
 
    public Tutorial (final LifeMM game) {
@@ -71,8 +67,8 @@ public class Tutorial extends ScreenOverride {
       hasKilledEnemy = false;
 
       // Initialize lists
-      crates = new ArrayList<>();
-      enemies = new ArrayList<>();
+      crates = new ArrayList<Crate>();
+      enemies = new ArrayList<Spider>();
 
       // Generate the font we use
       FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("GROBOLD.ttf"));
