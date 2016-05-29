@@ -25,7 +25,7 @@ public class MainGame extends ScreenOverride {
    public enum MainGameState {PLAY, PAUSED, SELECT};
 
    // Main Character and Treasure
-   public Waldo waldo;
+   private Waldo waldo;
    Treasure treasure;
 
    // Levels
@@ -54,11 +54,9 @@ public class MainGame extends ScreenOverride {
    private static final int FLOOR = 235;
    private static final int ATTACKING = 1;
    private static final int MOVING = 2;
-   private static final int JUMPING = 3;
    private static final int BUILDING = 4;
-   private static final int LEFT = -1;
-   private static final int RIGHT = 1;
-   
+   private static final String crateImgLoc = "crate.png";  
+ 
    // Globals
    private MainGameState state = MainGameState.PLAY;
    private int framesInState;
@@ -66,7 +64,6 @@ public class MainGame extends ScreenOverride {
    private int buttonSelection;
    private int maxButtons;
    private int delay;
-   private Renderer renderer; 
     
    // Function that gets called once to prepare everything needed for render
    public MainGame (final LifeMM game) {
@@ -78,17 +75,17 @@ public class MainGame extends ScreenOverride {
       waldo = new Waldo();
       treasure = new Treasure();
       time = new Stopwatch();
-      renderer = Renderer.getInstance();
+      Renderer renderer = Renderer.getInstance();
 
       // Load Textures
       backgroundTexture = new Texture("bg4.png");
       floorTexture = new Texture("floor.png");
       // Load Button Textures for Block Selection Menu (Temporary Graphics)
-      buttons.add(new Texture("crate.png"));
-      buttons.add(new Texture("crate.png"));
+      buttons.add(new Texture(crateImgLoc));
+      buttons.add(new Texture(crateImgLoc));
       buttons.add(new Texture("playbutton.png")); 
-      selectedButtons.add(new Texture("crate.png"));
-      selectedButtons.add(new Texture("crate.png"));
+      selectedButtons.add(new Texture(crateImgLoc));
+      selectedButtons.add(new Texture(crateImgLoc));
       selectedButtons.add(new Texture("playbuttonselected.png"));
 
       // Load Sounds
@@ -128,23 +125,7 @@ public class MainGame extends ScreenOverride {
       }
     }
 
-   public void doPlay() {
-      // Clears the screen, don't remove
-      Gdx.gl.glClearColor(1, 1, 1, 1);
-      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-      // Keep track of the number of frames that the
-      // main character has spent in his current state
-      waldo.updateStateTime();
-
-      // Update how long the main character has been in
-      // his current state for.
-      waldo.updateState();
-
-      // Accept user input
-      updateWaldoMovement();
-      boundsCheckWaldo();
-
+   public void checkEndGame() {
       if (waldo.getHealth() <= 0) {
          waldo.decrementLives();
          waldo.setX(waldo.getLocation().x);
@@ -170,9 +151,27 @@ public class MainGame extends ScreenOverride {
          }
          dispose();
       }
+   }
 
+   public void doPlay() {
+      // Clears the screen, don't remove
+      Gdx.gl.glClearColor(1, 1, 1, 1);
+      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+      // Keep track of the number of frames that the
+      // main character has spent in his current state
+      waldo.updateStateTime();
+
+      // Update how long the main character has been in
+      // his current state for.
+      waldo.updateState();
+
+      // Accept user input
+      updateWaldoMovement();
+      boundsCheckWaldo();
+      
+      checkEndGame();
       waldo.update();
-
       framesInState++;
 
       if (framesInState > 20 && Gdx.input.isKeyPressed(Keys.B)) {
@@ -197,14 +196,10 @@ public class MainGame extends ScreenOverride {
       updateCloudsPosition();
 
 
-      // if the game is in a level pause,
-      // then update the level state;
       if (level.isInLevelPause()) {
           level.updateLevelIfInPause();
        }
 
-      // if the game is not in a level pause, update
-      // the states of the current enemies
       if (!level.isInLevelPause()) { 
          updateEnemiesState();
       }
@@ -241,13 +236,7 @@ public class MainGame extends ScreenOverride {
       game.batch.end();
    }
 
-   // Update the state and position of the main character based on user input
-   public void updateWaldoMovement() {
-    if (Gdx.input.isKeyPressed(Keys.UP) && waldo.getLocation().y == FLOOR) {
-         waldo.setYVelocity(15);
-         waldo.setYAcceleration(-1);
-      }
-
+   public void updateWaldoAttack() {
       if (Gdx.input.isKeyPressed(Keys.SPACE) && waldo.getState() != ATTACKING) {
          waldo.setState(ATTACKING);
          for (Entity s : enemies) {
@@ -255,9 +244,23 @@ public class MainGame extends ScreenOverride {
                s.setHealth(s.getHealth() - 300);
             }
             // Debug Output
-            System.out.println(isAttackCollision(waldo, s));
+            LOGGER.log(Level.INFO, Boolean.toString(isAttackCollision(waldo, s)));
          }
       }
+   }
+
+   public void updateWaldoJump() {
+       if (Gdx.input.isKeyPressed(Keys.UP) && waldo.getLocation().y == FLOOR) {
+         waldo.setYVelocity(15);
+         waldo.setYAcceleration(-1);
+       }
+   }
+
+   // Update the state and position of the main character based on user input
+   public void updateWaldoMovement() {
+
+      updateWaldoJump();
+      updateWaldoAttack();
 
       if (Gdx.input.isKeyPressed(Keys.LEFT)) {
          waldo.setXVelocity(-4);
@@ -284,13 +287,13 @@ public class MainGame extends ScreenOverride {
          // Check for collisions
          for (int i = 0; i < crates.size(); i++) {
             if (isCollision(crates.get(i).getLocation(), temp)) {
-               System.out.println("Can't place block here");
+               LOGGER.log(Level.INFO, "Can't place block here");
                return;
             }
          }
 
          if (isCollision(treasure.getLocation(), temp)) {
-            System.out.println("Can't place block here");
+            LOGGER.log(Level.INFO, "Can't place block here");
             return;
          }
 
@@ -303,39 +306,42 @@ public class MainGame extends ScreenOverride {
       }
    }
 
-   public void updateEnemiesState() {
-      for (Enemy s : enemies) {
-         s.updateStateTime();
-         boolean move = true;
+   public boolean checkEnemyCollisions(Enemy s) {
          for (Entity c : crates) {
             if (isCollision(s.getLocation(), c.getLocation())) {
-               move = false;
                if (s.getState() != ATTACKING) {
                   s.setState(ATTACKING);
                   c.setHealth(c.getHealth() - s.getDamage());
                }
+               return false;
             }
          }
+         return true;
+   }
+
+   public void updateEnemiesState() {
+      for (Enemy s : enemies) {
+         s.updateStateTime();
+         boolean move = checkEnemyCollisions(s);
          if (isCollision(s.getLocation(), waldo.getLocation())) {
-            move = false;
             if (s.getState() != ATTACKING) {
                s.setState(ATTACKING);
                waldo.setHealth(waldo.getHealth() - s.getDamage());
             }
          }
-         if (isCollision(s.getLocation(), treasure.getLocation())) {
-            move = false;
+         else if (isCollision(s.getLocation(), treasure.getLocation())) {
             if (s.getState() != ATTACKING) {
                s.setState(ATTACKING);
                treasure.setHealth(treasure.getHealth() - s.getDamage());
             }
          }
-         if (move) {
-            s.update();
-         }
-         if (s.getTimeInState() > s.getAttackInterval()) {
+         else if (s.getTimeInState() > s.getAttackInterval()) {
             s.setState(MOVING);
          }
+         else if (move) {
+            s.update();
+         }
+         
       }
    }
 
@@ -343,7 +349,7 @@ public class MainGame extends ScreenOverride {
       game.batch.begin();
       font.draw(game.batch, "Select a Block", 1440/2 - 200, 600);
       for (int ndx = 0; ndx < maxButtons; ndx++) {
-	  game.batch.draw(buttons.get(ndx), 1440/2 - 100, 400 - 128 * ndx);
+	      game.batch.draw(buttons.get(ndx), 1440/2 - 100, 400 - 128 * ndx);
       }
       game.batch.draw(selectedButtons.get(buttonSelection), 1440/2 - 100, 400 - 128 * buttonSelection);
       if (Gdx.input.isKeyPressed(Keys.UP) && delay < 0) {
@@ -352,21 +358,17 @@ public class MainGame extends ScreenOverride {
          }
          delay = 15;
       }
-
-      if (Gdx.input.isKeyPressed(Keys.DOWN) && delay < 0) {
+      else if (Gdx.input.isKeyPressed(Keys.DOWN) && delay < 0) {
          if (buttonSelection < maxButtons) {
             buttonSelection++;
          }
          delay = 15;
-	 }
-
-      if (Gdx.input.isKeyPressed(Keys.ENTER)) {
-	 // need something to tell different blocks apart, a collection of them
-         // whose indexes correspond to the same number as the button's
-	 state = MainGameState.PLAY;
+	   }
+      else if (Gdx.input.isKeyPressed(Keys.ENTER)) {
+	      state = MainGameState.PLAY;
          framesInState = 0;
       }
-      if (framesInState > 20 && Gdx.input.isKeyPressed(Keys.B)) {
+      else if (framesInState > 20 && Gdx.input.isKeyPressed(Keys.B)) {
          state = MainGameState.PLAY;
          framesInState = 0;
       }
@@ -410,21 +412,22 @@ public class MainGame extends ScreenOverride {
    }
    
    void printDebugInfo() {
-      System.out.println("DEBUG INFO");
-      System.out.println("--------------------------------------");
-      System.out.println("Waldo State: " + waldo.getState());
-      System.out.println("Waldo X: " + (waldo.getLocation().x + waldo.getLocation().width/2));
-      System.out.println("Waldo Y: " + waldo.getLocation().y);
-      System.out.println("Waldo Yvel: " + waldo.getYVelocity());
-      System.out.println("Waldo Yacc: " + waldo.getYAcceleration());
-      System.out.println("Waldo Xvel: " + waldo.getXVelocity());
-      System.out.println("Waldo Xacc: " + waldo.getXAcceleration());
-      System.out.println("Waldo Health: " + waldo.getHealth());
-      System.out.println("Waldo Direction: " + waldo.getDirection());
-      System.out.println("Treasure X: " + (treasure.getLocation().x + treasure.getLocation().width/2));
-      System.out.println("Treasure Health: " + treasure.getHealth());
-      System.out.println("--------------------------------------");
-      System.out.println("");
+
+      LOGGER.log(Level.INFO, "DEBUG INFO");
+      LOGGER.log(Level.INFO, "--------------------------------------");
+      LOGGER.log(Level.INFO, "Waldo State: " + waldo.getState());
+      LOGGER.log(Level.INFO, "Waldo X: " + (waldo.getLocation().x + waldo.getLocation().width/2));
+      LOGGER.log(Level.INFO, "Waldo Y: " + waldo.getLocation().y);
+      LOGGER.log(Level.INFO, "Waldo Yvel: " + waldo.getYVelocity());
+      LOGGER.log(Level.INFO, "Waldo Yacc: " + waldo.getYAcceleration());
+      LOGGER.log(Level.INFO, "Waldo Xvel: " + waldo.getXVelocity());
+      LOGGER.log(Level.INFO, "Waldo Xacc: " + waldo.getXAcceleration());
+      LOGGER.log(Level.INFO, "Waldo Health: " + waldo.getHealth());
+      LOGGER.log(Level.INFO, "Waldo Direction: " + waldo.getDirection());
+      LOGGER.log(Level.INFO, "Treasure X: " + (treasure.getLocation().x + treasure.getLocation().width/2));
+      LOGGER.log(Level.INFO, "Treasure Health: " + treasure.getHealth());
+      LOGGER.log(Level.INFO, "--------------------------------------");
+      LOGGER.log(Level.INFO, "");
    }
 
    // Check what enemies are alive
@@ -500,7 +503,7 @@ public class MainGame extends ScreenOverride {
    public boolean isAttackCollision(Waldo waldo, Entity entity) {
       float distance = (waldo.getX() + waldo.getWidth()/2) - (entity.getX() + entity.getWidth()/2);
  
-      System.out.println("Distance away: " + distance);
+      LOGGER.log(Level.INFO, "Distance away: " + distance);
      
       Entity.Direction requiredDirection;
 
@@ -510,7 +513,7 @@ public class MainGame extends ScreenOverride {
          requiredDirection = Entity.Direction.RIGHT;
       }
 
-      return ((waldo.getDirection() == requiredDirection) && Math.abs(distance) < 150);
+      return (waldo.getDirection() == requiredDirection) && Math.abs(distance) < 150;
    }
 
    @Override
