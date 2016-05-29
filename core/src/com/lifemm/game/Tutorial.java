@@ -122,55 +122,7 @@ public class Tutorial extends ScreenOverride {
       game.batch.end();
    }
 
-   public void doMovement() {
-      // Clears the screen, don't remove
-      Gdx.gl.glClearColor(1, 1, 1, 1);
-      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-      // Checks for player input and movement
-      updateWaldoMovement();
-      waldo.updateStateTime();
-      waldo.updateState();
-      waldo.update();
-      boundsCheckWaldo();
-
-      game.batch.begin();
-      renderBG();
-      game.batch.draw(Renderer.getInstance().getTreasureTexture(), treasure.getLocation().x, treasure.getLocation().y);
-      game.batch.draw(renderer.getCurrentTexture(waldo), waldo.getLocation().x, waldo.getLocation().y);
-      font.draw(game.batch, "Press the arrow keys to move", 1440/2 - 400, 600);
-      game.batch.end();
-
-      if (hasMovedRight && hasMovedLeft && hasJumped) {
-         this.setTutorialState(TutorialState.PLACEBLOCK);
-      }
-   }
-
-   public void doPlaceBlock() {
-      // Clears the screen, don't remove
-      Gdx.gl.glClearColor(1, 1, 1, 1);
-      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-      // Checks for player input and movement
-      updateWaldoMovement();
-      waldo.updateStateTime();
-      waldo.updateState();
-      waldo.update();
-      boundsCheckWaldo();
-
-      game.batch.begin();
-      renderBG();
-      game.batch.draw(Renderer.getInstance().getTreasureTexture(), treasure.getLocation().x, treasure.getLocation().y);
-      game.batch.draw(renderer.getCurrentTexture(waldo), waldo.getLocation().x, waldo.getLocation().y);
-      font.draw(game.batch, "Press 'A' to place a block", 1440/2 - 400, 600);
-      renderCrates();
-      game.batch.end();
-      if (hasPlacedBlock) {
-         this.setTutorialState(TutorialState.ATTACK);
-      }
-   }
-
-   public void doAttack() {
+   public void drawLogic() {
       // Clears the screen, don't remove
       Gdx.gl.glClearColor(1, 1, 1, 1);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -188,32 +140,42 @@ public class Tutorial extends ScreenOverride {
       deleteDeadEnemies();
       game.batch.draw(Renderer.getInstance().getTreasureTexture(), treasure.getLocation().x, treasure.getLocation().y);
       game.batch.draw(renderer.getCurrentTexture(waldo), waldo.getLocation().x, waldo.getLocation().y);
-      font.draw(game.batch, "Press 'SPACE' to attack", 1440/2 - 400, 600);
       renderCrates();
+      if (this.state == TutorialState.MOVEMENT) {
+         font.draw(game.batch, "Press the arrow keys to move", 1440/2 - 400, 600);
+      } else if (this.state == TutorialState.PLACEBLOCK) {
+         font.draw(game.batch, "Press 'A' to place a block", 1440/2 - 400, 600);
+      } else if (this.state == TutorialState.ATTACK) {
+         font.draw(game.batch, "Press 'SPACE' to attack", 1440/2 - 400, 600);
+      } else {
+         font.draw(game.batch, "Press 'ESC' to leave tutorial", 1440/2 - 400, 600);
+      }
       game.batch.end();
+   }
+
+   public void doMovement() {
+      drawLogic(); 
+      if (hasMovedRight && hasMovedLeft && hasJumped) {
+         this.setTutorialState(TutorialState.PLACEBLOCK);
+      }
+   }
+
+   public void doPlaceBlock() {
+      drawLogic();
+      if (hasPlacedBlock) {
+         this.setTutorialState(TutorialState.ATTACK);
+      }
+   }
+
+   public void doAttack() {
+      drawLogic();
       if (hasKilledEnemy) {
          this.setTutorialState(TutorialState.FINISHED);
       }
    }
 
    public void doFinished() {
-      // Clears the screen, don't remove
-      Gdx.gl.glClearColor(1, 1, 1, 1);
-      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-      // Checks for player input and movement
-      updateWaldoMovement();
-      waldo.updateStateTime();
-      waldo.updateState();
-      waldo.update();
-      boundsCheckWaldo();
-
-      game.batch.begin();
-      renderBG();
-      game.batch.draw(Renderer.getInstance().getTreasureTexture(), treasure.getLocation().x, treasure.getLocation().y);
-      game.batch.draw(renderer.getCurrentTexture(waldo), waldo.getLocation().x, waldo.getLocation().y);
-      font.draw(game.batch, "Press 'ESC' to leave tutorial", 1440/2 - 400, 600);
-      game.batch.end();
+      drawLogic();
       if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
          game.setScreen(new MainMenu(game));
          dispose();
@@ -272,6 +234,7 @@ public class Tutorial extends ScreenOverride {
             waldo.setYVelocity(15);
             waldo.setYAcceleration(-1);
          }
+         System.out.println("Has jumped\n");
          hasJumped = true;
       }
 
