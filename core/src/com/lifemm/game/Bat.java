@@ -18,8 +18,8 @@ public class Bat extends Enemy {
       this.direction = Entity.Direction.RIGHT;
       this.setXVelocity(1); 
 
-      this.attackInterval = 50;
-      this.damage = 20;
+      this.attackInterval = 20;
+      this.damage = 10;
       this.timeInState = 0;
       this.state = MOVING;
       this.texture = new Texture("bat.png");

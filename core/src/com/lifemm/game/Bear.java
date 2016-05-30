@@ -34,8 +34,8 @@ public class Bear extends Enemy {
 
       this.direction = direct;
 
-      this.attackInterval = 50;
-      this.damage = 20;
+      this.attackInterval = 100;
+      this.damage = 30;
       this.timeInState = 0;
       this.state = MOVING;
       if (direct == Entity.Direction.RIGHT)
