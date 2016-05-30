@@ -2,6 +2,7 @@ package com.lifemm.game;
 
 import org.junit.Test;
 import com.lifemm.game.Waldo;
+import junit.framework.TestCase;
 
 /**
  * Tests the Waldo object.
