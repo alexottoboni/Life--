@@ -1,5 +1,7 @@
 package com.lifemm.game;
 
+import com.badlogic.gdx.graphics.Texture;
+
 public abstract class Enemy extends Entity {
 
    protected int attackInterval;
@@ -31,5 +33,7 @@ public abstract class Enemy extends Entity {
    public int getDamage() {
       return this.damage;
    }
+
+   abstract public Texture getCurrentTexture();
 
 }

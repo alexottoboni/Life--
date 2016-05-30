@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.Random;
 
 public class MainGame extends ScreenOverride {
    
@@ -35,7 +36,7 @@ public class MainGame extends ScreenOverride {
    BitmapFont font;
   
    // List of entities that currently exist
-   private List<Spider> enemies;
+   private List<Enemy> enemies;
    private List<Crate> crates;
    private List<Cloud> clouds;
 
@@ -64,6 +65,7 @@ public class MainGame extends ScreenOverride {
    private int buttonSelection;
    private int maxButtons;
    private int delay;
+   private EnemyFactory factory;
     
    // Function that gets called once to prepare everything needed for render
    public MainGame (final LifeMM game) {
@@ -75,6 +77,7 @@ public class MainGame extends ScreenOverride {
       waldo = new Waldo();
       treasure = new Treasure();
       time = new Stopwatch();
+      factory = new EnemyFactory();
 
       // Load Textures
       backgroundTexture = new Texture("bg4.png");
@@ -103,7 +106,7 @@ public class MainGame extends ScreenOverride {
       crates = new ArrayList<>();
       clouds = new ArrayList<>();
       enemies = new ArrayList<>();
-      enemies.add(new Spider());
+      enemies.add(factory.getEnemy("Spider"));
       clouds.add(new Cloud(1, 300, -100));
       clouds.add(new Cloud(2, 0, 0));
       
@@ -442,6 +445,23 @@ public class MainGame extends ScreenOverride {
       LOGGER.log(Level.INFO, "");
    }
 
+   public Enemy getNewEnemy(int direction) {
+      Random generator = new Random();
+      Entity.Direction newDir = Entity.Direction.RIGHT;
+      if (direction == 1) {
+         newDir = Entity.Direction.LEFT;
+      }
+      int selection = generator.nextInt(3) + 1;
+      if (selection == 1) {
+         return factory.getEnemy("Bear", newDir);
+      } else if (selection == 2) {
+         return factory.getEnemy("Bat", newDir);
+      } else if (selection == 3) {
+         return factory.getEnemy("Spider", newDir);
+      }
+      return null;
+   }
+
    // Check what enemies are alive
    public void deleteDeadEnemies() {
       for (int i = 0; i < enemies.size(); i++) {
@@ -452,13 +472,13 @@ public class MainGame extends ScreenOverride {
             waldo.addScore(1000);
             // create a new ememy to appear on the left side of the game field
             if (level.getTotalEnemiesKilled()%2 == 1) {
-               Spider leftSpider = new Spider(Entity.Direction.LEFT);
-               enemies.add(leftSpider);
+               Enemy leftEnemy = getNewEnemy(0);
+               enemies.add(leftEnemy);
             }
             // create a new ememy to appear on the right side fo the game field
 	    else {
-               Spider rightSpider = new Spider(Entity.Direction.RIGHT);
-               enemies.add(rightSpider);
+               Enemy rightEnemy = getNewEnemy(1);
+               enemies.add(rightEnemy);
             }
            // if all the enemies have been killed in the level,
            // then go to the next level
@@ -495,7 +515,7 @@ public class MainGame extends ScreenOverride {
    }
 
    public void renderEnemies() {
-      for (Spider s : enemies) {
+      for (Enemy s : enemies) {
          if (s.getHealth() > 0) {
             game.batch.draw(s.getCurrentTexture(), s.getLocation().x, s.getLocation().y);
          }
