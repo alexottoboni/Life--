@@ -7,6 +7,9 @@ public class Bear extends Enemy {
    }
 
    Bear(Entity.Direction direct) {
+      super(direct);
       this.setHealth(1000);
+      this.attackInterval = 100;
+      this.damage = 50;
    }
 }

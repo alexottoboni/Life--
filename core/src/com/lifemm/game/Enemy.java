@@ -27,10 +27,19 @@ public abstract class Enemy extends Entity {
    }
 
    Enemy(Entity.Direction direct) {
-      if (direct == Entity.Direction.RIGHT) {
+      location.x = 0;
+      location.y = FLOOR;
+      location.width = 128;
+      location.height = 128;
+      this.direction = direct;
+      this.timeInState = 0;
+      this.state = MOVING;
+      if (direct == Entity.Direction.RIGHT)
+      {
           this.setXVelocity(1); 
       }
-      else {
+      else
+      {
           this.setXVelocity(-1);
           location.x = 1400;
       }

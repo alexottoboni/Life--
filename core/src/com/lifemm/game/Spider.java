@@ -7,7 +7,10 @@ public class Spider extends Enemy {
    }
 
    Spider(Entity.Direction direct) {
+      super(direct);
       this.setHealth(500);
+      this.attackInterval = 50;
+      this.damage = 20;
    }
 
 }

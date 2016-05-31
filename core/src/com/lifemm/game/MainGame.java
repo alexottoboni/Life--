@@ -345,14 +345,13 @@ public class MainGame extends ScreenOverride {
                s.setState(ATTACKING);
                treasure.setHealth(treasure.getHealth() - s.getDamage());
             }
-         }
-         else if (s.getTimeInState() > s.getAttackInterval()) {
-            s.setState(MOVING);
-         }
-         else if (move) {
+         } else if (move) {
             s.update();
          }
          
+         if (s.getTimeInState() > s.getAttackInterval()) {
+            s.setState(MOVING);
+         }
       }
    }
 
