@@ -14,8 +14,6 @@ import junit.framework.TestCase;
 
 public class TestEnemyFactory extends TestCase {
 
-    private static final Logger LOGGER = Logger.getLogger(TestScoreAPI.class.getName()); 
-
     public void testGetEnemyBear() {
       EnemyFactory ef = new EnemyFactory();
       Enemy bear = ef.getEnemy("Bear");
