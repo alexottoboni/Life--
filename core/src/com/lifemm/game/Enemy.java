@@ -1,6 +1,6 @@
 package com.lifemm.game;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 
 public abstract class Enemy extends Entity {
 
@@ -24,6 +24,16 @@ public abstract class Enemy extends Entity {
       this.damage = 20;
       this.timeInState = 0;
       this.state = MOVING;
+   }
+
+   Enemy(Entity.Direction direct) {
+      if (direct == Entity.Direction.RIGHT) {
+          this.setXVelocity(1); 
+      }
+      else {
+          this.setXVelocity(-1);
+          location.x = 1400;
+      }
    }
 
    public void updateStateTime() {
@@ -51,4 +61,11 @@ public abstract class Enemy extends Entity {
       return this.damage;
    }
 
+   public void setLocationX(float x) {
+      this.location.x = x;
+   }
+
+   public Rectangle getLocation() {
+      return this.location;
+   }
 }
