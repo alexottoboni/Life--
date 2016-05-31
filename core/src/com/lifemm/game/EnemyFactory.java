@@ -2,28 +2,22 @@ package com.lifemm.game;
 
 public class EnemyFactory {
    public Enemy getEnemy(String enemyType) {
-      if (enemyType == null) {
-         return null;
-      }
-      if (enemyType.equalsIgnoreCase("SPIDER")) {
+      if ("SPIDER".equalsIgnoreCase(enemyType)) {
          return new Spider();
-      } else if (enemyType.equalsIgnoreCase("BEAR")) {
+      } else if ("BEAR".equalsIgnoreCase(enemyType)) {
          return new Bear();
-      } else if (enemyType.equalsIgnoreCase("BAT")) {
+      } else if ("BAT".equalsIgnoreCase(enemyType)) {
          return new Bat();
       }
       return null;
    }
 
    public Enemy getEnemy(String enemyType, Entity.Direction direction) {
-      if (enemyType == null) {
-         return null;
-      }
-      if (enemyType.equalsIgnoreCase("SPIDER")) {
+      if ("SPIDER".equalsIgnoreCase(enemyType)) {
          return new Spider(direction);
-      } else if (enemyType.equalsIgnoreCase("BEAR")) {
+      } else if ("BEAR".equalsIgnoreCase(enemyType)) {
          return new Bear(direction);
-      } else if (enemyType.equalsIgnoreCase("BAT")) {
+      } else if ("BAT".equalsIgnoreCase(enemyType)) {
          return new Bat(direction);
       }
       return null;

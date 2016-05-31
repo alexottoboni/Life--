@@ -43,18 +43,37 @@ public class Renderer {
    }
 
    public Texture getCurrentTexture(Enemy enemy) {
-      if (enemy instanceof Spider && enemy.getDirection() == Entity.Direction.RIGHT) {
+      if (enemy instanceof Spider) {
+         return isSpider(enemy);
+      } else if (enemy instanceof Bear) {
+         return isBear(enemy);
+      } else if (enemy instanceof Bat) {
+         return isBat(enemy);
+      }
+      return null;
+   }
+
+   public Texture isSpider(Enemy enemy) {
+      if (enemy.getDirection() == Entity.Direction.RIGHT) {
          return this.spider;
-      } else if (enemy instanceof Spider && enemy.getDirection() == Entity.Direction.LEFT) {
+      } else {
          return this.spiderLeft;
-      } else if (enemy instanceof Bear && enemy.getDirection() == Entity.Direction.LEFT) {
-         return this.bearLeft;
-      } else if (enemy instanceof Bear && enemy.getDirection() == Entity.Direction.RIGHT) {
-         return this.bear;
-      } else if (enemy instanceof Bat && enemy.getDirection() == Entity.Direction.RIGHT) {
+      }
+   }
+
+   public Texture isBat(Enemy enemy) {
+      if (enemy.getDirection() == Entity.Direction.RIGHT) {
          return this.bat;
       } else {
          return this.batLeft;
+      }
+   }
+
+   public Texture isBear(Enemy enemy) {
+      if (enemy.getDirection() == Entity.Direction.RIGHT) {
+         return this.bear;
+      } else {
+         return this.bearLeft;
       }
    }
 
