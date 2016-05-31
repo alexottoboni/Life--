@@ -4,6 +4,8 @@ public class Bat extends Enemy {
 
    Bat() {
       this.setHealth(100);
+      this.attackInterval = 20;
+      this.damage = 10;
    }
 
    Bat(Entity.Direction direct) {
