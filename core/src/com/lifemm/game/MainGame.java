@@ -517,7 +517,7 @@ public class MainGame extends ScreenOverride {
    public void renderEnemies() {
       for (Enemy s : enemies) {
          if (s.getHealth() > 0) {
-            game.batch.draw(s.getCurrentTexture(), s.getLocation().x, s.getLocation().y);
+            game.batch.draw(Renderer.getInstance().getCurrentTexture(s), s.getLocation().x, s.getLocation().y);
          }
       }
    }

@@ -13,7 +13,12 @@ public class Renderer {
    private Texture rightAttackTexture;
    private Texture leftAttackTexture;
    private Texture treasure;
-
+   private Texture spider;
+   private Texture spiderLeft;
+   private Texture bear;
+   private Texture bearLeft;
+   private Texture bat;
+   private Texture batLeft;
    private static Renderer instance;
 
    private Renderer() {
@@ -22,6 +27,12 @@ public class Renderer {
       this.rightAttackTexture = new Texture("playerswing_right.png");
       this.leftAttackTexture = new Texture("playerswing_left.png");
       this.treasure = new Texture("heart.png");
+      this.spider = new Texture("spider.png");
+      this.spiderLeft = new Texture("spiderLeft.png");
+      this.bear = new Texture("bear.png");
+      this.bearLeft = new Texture("bearLeft.png");
+      this.bat = new Texture("bat.png");
+      this.batLeft = new Texture("batLeft.png");
    }
 
    public static Renderer getInstance() {
@@ -29,6 +40,22 @@ public class Renderer {
          instance = new Renderer();
       }
       return instance;
+   }
+
+   public Texture getCurrentTexture(Enemy enemy) {
+      if (enemy instanceof Spider && enemy.getDirection() == Entity.Direction.RIGHT) {
+         return this.spider;
+      } else if (enemy instanceof Spider && enemy.getDirection() == Entity.Direction.LEFT) {
+         return this.spiderLeft;
+      } else if (enemy instanceof Bear && enemy.getDirection() == Entity.Direction.LEFT) {
+         return this.bearLeft;
+      } else if (enemy instanceof Bear && enemy.getDirection() == Entity.Direction.RIGHT) {
+         return this.bear;
+      } else if (enemy instanceof Bat && enemy.getDirection() == Entity.Direction.RIGHT) {
+         return this.bat;
+      } else {
+         return this.batLeft;
+      }
    }
 
    public Texture getCurrentTexture(Waldo waldo) {
