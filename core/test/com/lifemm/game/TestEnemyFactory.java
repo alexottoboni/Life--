@@ -18,7 +18,7 @@ public class TestEnemyFactory extends TestCase {
       EnemyFactory ef = new EnemyFactory();
       Enemy bear = ef.getEnemy("Bear", Entity.Direction.RIGHT);
       
-      assertEquals(100, bear.getAttackInterval());
+      assertEquals(50, bear.getDamage());
     }
 
     public void testGetEnemyBatLeft() {
