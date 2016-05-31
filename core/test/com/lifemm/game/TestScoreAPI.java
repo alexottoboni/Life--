@@ -1,4 +1,4 @@
-pckage com.lifemm.game;
+package com.lifemm.game;
 
 import org.junit.Test;
 import com.lifemm.game.Score;
