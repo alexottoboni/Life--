@@ -60,6 +60,6 @@ public class TestDeleteDeadCratesLoop extends TestCase {
         crateList.add(crate8);
         crateList.add(crate9);
         crateList.deleteDeadCrates();
-        assertEquals(1, crateList.size());
+        assertEquals(10, crateList.size());
     }
 }
