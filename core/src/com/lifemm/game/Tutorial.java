@@ -213,7 +213,7 @@ public class Tutorial extends ScreenOverride {
 
    public void renderCrates() {
          for (int i = 0; i < crates.size(); i++) {
-            game.batch.draw(crates.get(i).getCurrentTexture(), crates.get(i).getLocation().x, crates.get(i).getLocation().y);
+            game.batch.draw(Renderer.getInstance().getCrateTexture(), crates.get(i).getLocation().x, crates.get(i).getLocation().y);
          }
    }
 

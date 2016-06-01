@@ -37,7 +37,7 @@ public class MainGame extends ScreenOverride {
   
    // List of entities that currently exist
    private List<Enemy> enemies;
-   private List<Crate> crates;
+   private CrateList crates;
    private List<Cloud> clouds;
 
    // Textures for the background and floor
@@ -103,7 +103,7 @@ public class MainGame extends ScreenOverride {
       font = generator.generateFont(parameter);
 
       // Create lists of entities 
-      crates = new ArrayList<>();
+      crates = new CrateList();
       clouds = new ArrayList<>();
       enemies = new ArrayList<>();
       enemies.add(factory.getEnemy("Spider"));
@@ -222,7 +222,7 @@ public class MainGame extends ScreenOverride {
       time.lap();
       
       deleteDeadEnemies();
-      deleteDeadCrates();
+      crates.deleteDeadCrates();
       renderCrates();
 
       // if the game is not in  a level pause, then render the enemies
@@ -318,7 +318,7 @@ public class MainGame extends ScreenOverride {
    }
 
    public boolean checkEnemyCollisions(Enemy s) {
-         for (Entity c : crates) {
+         for (Crate c : crates.getIterable()) {
             if (isCollision(s.getLocation(), c.getLocation())) {
                if (s.getState() != ATTACKING) {
                   s.setState(ATTACKING);
@@ -523,7 +523,7 @@ public class MainGame extends ScreenOverride {
 
    public void renderCrates() {
       for (int i = 0; i < crates.size(); i++) {
-         game.batch.draw(crates.get(i).getCurrentTexture(), crates.get(i).getLocation().x, crates.get(i).getLocation().y);
+         game.batch.draw(Renderer.getInstance().getCrateTexture(), crates.get(i).getLocation().x, crates.get(i).getLocation().y);
       }
    }
 

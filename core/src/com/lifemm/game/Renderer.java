@@ -19,6 +19,7 @@ public class Renderer {
    private Texture bearLeft;
    private Texture bat;
    private Texture batLeft;
+   private Texture crate;
    private static Renderer instance;
 
    private Renderer() {
@@ -33,6 +34,7 @@ public class Renderer {
       this.bearLeft = new Texture("bearLeft.png");
       this.bat = new Texture("bat.png");
       this.batLeft = new Texture("batLeft.png");
+      this.crate = new Texture("crate.png");
    }
 
    public static Renderer getInstance() {
@@ -97,5 +99,9 @@ public class Renderer {
 
    public Texture getTreasureTexture() {
       return this.treasure;
+   }
+
+   public Texture getCrateTexture() {
+      return this.crate;
    }
 }
