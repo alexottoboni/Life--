@@ -8,7 +8,7 @@ public class CrateList {
     private List<Crate> crates;
 
     public CrateList() {
-        crates = new LinkedList<Crate>();
+        crates = new LinkedList<>();
     }
 
     public void add(Crate crate) {

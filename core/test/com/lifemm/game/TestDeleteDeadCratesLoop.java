@@ -2,10 +2,7 @@ package com.lifemm.game;
 
 import org.junit.Test;
 import com.lifemm.game.CrateList;
-import com.lifemm.game.Entity;
-import com.badlogic.gdx.math.Rectangle;
 import junit.framework.TestCase;
-import java.util.LinkedList;
 
 /**
  * Tests the Enemy objects.
@@ -63,6 +60,6 @@ public class TestDeleteDeadCratesLoop extends TestCase {
         crateList.add(crate8);
         crateList.add(crate9);
         crateList.deleteDeadCrates();
-        assertEquals(10, crateList.size());
+        assertEquals(1, crateList.size());
     }
 }
