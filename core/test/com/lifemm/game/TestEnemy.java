@@ -3,7 +3,6 @@ package com.lifemm.game;
 import org.junit.Test;
 import com.lifemm.game.Enemy;
 import com.lifemm.game.Entity;
-import com.badlogic.gdx.math.Rectangle;
 import junit.framework.TestCase;
 
 /**

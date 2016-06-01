@@ -2,8 +2,6 @@ package com.lifemm.game;
 
 import org.junit.Test;
 import com.lifemm.game.EnemyFactory;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 
 import junit.framework.TestCase;
 
