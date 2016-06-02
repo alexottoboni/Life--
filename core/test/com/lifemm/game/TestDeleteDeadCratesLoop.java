@@ -5,8 +5,8 @@ import com.lifemm.game.CrateList;
 import junit.framework.TestCase;
 
 /**
- * Tests the Enemy objects.
- * @author Hristo Stoytchev
+ * Tests the loop that deleted dead crates.
+ * @author Wyatt Smith (wysmith)
  */
 
 public class TestDeleteDeadCratesLoop extends TestCase {
